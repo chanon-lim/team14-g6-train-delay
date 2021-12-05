@@ -1,8 +1,17 @@
 # team14-g6-train-delay
+
 Team 14 (Group 6) team exercise for making train delay web applciation.
 
+# Requirements
+
+```
+pip install -r requirements.txt
+```
+
 # Migrate & database initialization
+
 Whenever you initialize the database, please do this.
+
 ```
 python manage.py migrate
 python manage.py shell
