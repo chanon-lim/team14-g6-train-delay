@@ -23,7 +23,7 @@ body {
     bottom: 0; 
     left: 0;
     width: 200px; /*Width of frame div*/
-    padding: 20px;
+    padding: 20px 0 0 30px;
     height: 100%;
     overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
 }
@@ -67,10 +67,10 @@ body {
 }
 
 .card {
+    /* For multiple line ellipsis */
     height: 165px;
-    margin: 10px 5px;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    /* height: 120px; */
+    margin: 5px 5px;
 }
 
 .card.delay {
@@ -87,6 +87,13 @@ body {
 
 .card .card-text {
     padding-top: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /* white-space: nowrap; */
+    /* Multiple line ellipsis */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
 }
 
 .railway-icon {

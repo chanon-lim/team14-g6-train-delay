@@ -1,3 +1,5 @@
+// Sticky Table of Contents with Scrolling Active States
+// https://css-tricks.com/sticky-table-of-contents-with-scrolling-active-states/
 window.addEventListener('DOMContentLoaded', () => {
 
     const observer = new IntersectionObserver(entries => {
