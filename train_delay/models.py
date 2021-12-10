@@ -17,7 +17,10 @@ class TrainInfo(models.Model):
         self.railway_ja = side_data["railway_ja"]
         self.operator_en = side_data["operator_en"]
         self.operator_ja = side_data["operator_ja"]
-        self.information = data["odpt:trainInformationText"]["ja"]
+        info = data["odpt:trainInformationText"]["ja"]
+        if ('平常' in info) or (info == '現在、１５分以上の遅延はありません。'):
+            info = "平常運転"
+        self.information = info
         self.save()
 
     
