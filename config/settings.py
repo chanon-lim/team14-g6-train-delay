@@ -75,12 +75,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+MONGODB_URI = "mongodb+srv://p:p@cluster0.hgt7v.mongodb.net/g6t14traindelay?retryWrites=true&w=majority"
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": {
+        "ENGINE": "djongo",
+        "NAME": "t6g14traindelay",
+        "ENFORCE_SCHEMA": False,
+        "CLIENT": {
+            "host": MONGODB_URI,
+        },
+    },
 }
+
 
 
 # Password validation
