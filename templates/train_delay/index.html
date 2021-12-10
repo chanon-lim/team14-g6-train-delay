@@ -11,6 +11,7 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
     <title>Train Delay</title>
 </head>
 
@@ -33,15 +34,17 @@
                 {% if info.operator == operator %}
                 <div class="col-sm-4">
                     <div class="card {% if info.information|length > 25 %}delay{% else %}normal{% endif %}">
-                        <div class="card-body">
-                            <div class="header-card">
-                                <img src="https://traininfo.jreast.co.jp/train_info/img/ico_rosen_jk.svg" alt="icon"
-                                    class="railway-icon">
-                                <h5 class="card-title">{{ info.railway }}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ info.operator }}</h6>
+                        <a href="{% url 'train_delay:detail' info.id %}">
+                            <div class="card-body">
+                                <div class="header">
+                                    <img src="https://traininfo.jreast.co.jp/train_info/img/ico_rosen_jk.svg" alt="icon"
+                                        class="railway-icon">
+                                    <h5 class="card-title">{{ info.railway }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ info.operator }}</h6>
+                                </div>
+                                <p class="card-text">{{ info.information }}</p>
                             </div>
-                            <p class="card-text">{{ info.information }}</p>
-                        </div>
+                        </a>
                     </div>
                 </div>
                 {% endif %}

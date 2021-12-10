@@ -8,6 +8,16 @@ body {
     scroll-behavior: smooth;
 }
 
+a {
+    color: #000;
+    text-decoration-line: none!important;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 10px auto;
+}
+
 .container-fluid {
     padding: 0 100px 0 300px;
     margin: 10px auto;
@@ -46,7 +56,6 @@ body {
 
 .section-nav a {
     color: #ccc;
-    text-decoration-line: none;
     display: block;
     padding: .125rem 0 0 5px;
     transition: all 50ms ease-in-out;
@@ -68,9 +77,20 @@ body {
 
 .card {
     /* For multiple line ellipsis */
-    height: 165px;
-    /* height: 120px; */
+    /* height: 165px; */
+    height: 120px;
     margin: 5px 5px;
+    transition: all ease-out 0.1s;
+}
+
+.card:hover,
+.card:focus {
+    background-color: #F7F7F7;
+}
+
+.card a:hover,
+.card a:focus {
+    color: #000;
 }
 
 .card.delay {
@@ -81,7 +101,7 @@ body {
     border-left: 5px solid #2f9d8a;
 }
 
-.card .header-card {
+.card .header {
     border-bottom: 1px solid #ccc;
 }
 
@@ -89,11 +109,11 @@ body {
     padding-top: 10px;
     text-overflow: ellipsis;
     overflow: hidden;
-    /* white-space: nowrap; */
+    white-space: nowrap;
     /* Multiple line ellipsis */
-    display: -webkit-box;
+    /* display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;  
+    -webkit-box-orient: vertical;   */
 }
 
 .railway-icon {
