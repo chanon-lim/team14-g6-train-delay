@@ -77,8 +77,7 @@ a {
 
 .card {
     /* For multiple line ellipsis */
-    /* height: 165px; */
-    height: 120px;
+    height: 165px;
     margin: 5px 5px;
     transition: all ease-out 0.1s;
 }
@@ -97,11 +96,12 @@ a {
     border-left: 5px solid #C70039;
 }
 
-.card.normal {
+/* .card.normal {
     border-left: 5px solid #2f9d8a;
-}
+} */
 
 .card .header {
+    padding-bottom: 5px;
     border-bottom: 1px solid #ccc;
 }
 
@@ -117,8 +117,29 @@ a {
 }
 
 .railway-icon {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     float: left;
-    margin-right:1rem;
+    margin-top: 5px;
+    margin-right:5px;
+}
+
+/* ---------- */
+/* Responsive */
+/* ---------- */
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .container-fluid {
+        padding: 10px;
+        width: 100%;
+    }
+
+    .section-nav {
+        display: none;
+    }
+
+    .card {
+        height: fit-content;
+    }
 }

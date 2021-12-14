@@ -31,16 +31,16 @@
             <h2 class="operator">{{ operator }}</h2>
             <div class="row">
                 {% for info in information %}
-                {% if info.operator == operator %}
-                <div class="col-sm-4">
+                {% if info.operator_ja == operator %}
+                <div class="col-sm-12 col-lg-4">
                     <div class="card {% if info.information|length > 25 %}delay{% else %}normal{% endif %}">
                         <a href="{% url 'train_delay:detail' info.id %}">
                             <div class="card-body">
                                 <div class="header">
-                                    <img src="https://traininfo.jreast.co.jp/train_info/img/ico_rosen_jk.svg" alt="icon"
+                                    <img src="static/img/logo/{{ info.operator_en }} {{ info.railway_en }}.png" alt="icon"
                                         class="railway-icon">
-                                    <h5 class="card-title">{{ info.railway }}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">{{ info.operator }}</h6>
+                                    <h5 class="card-title">{{ info.railway_en }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ info.operator_en }}</h6>
                                 </div>
                                 <p class="card-text">{{ info.information }}</p>
                             </div>
