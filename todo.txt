@@ -1,0 +1,6 @@
+1. Make a running background script when running django server -> can refresh the database in 5 min to check the train delay
+
+2. Make tweet when train delay appear
+
+3. Allow user to register for a specific train line and send DM when delay occur
+- question? if share the same database with train, if train refresh, 
