@@ -7,6 +7,7 @@ from .util import *
 # Returns a database object
 
 def get_database():
+    """Get all data from the firebase"""
     config = {
         'apiKey': "AIzaSyCPwAwfC1iexLQg7DLXZf8ROReqE0xwx00",
         'authDomain': "traindelay-b6080.firebaseapp.com",

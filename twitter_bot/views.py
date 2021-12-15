@@ -10,10 +10,7 @@ import requests
 # Create your views here.
 def index(request):
     """Homepage of the chatbot"""
-    # print("Hope this is printed in live log") #ok worked!!!!
     print("The index method is called")
-    # print(request)
-    # print(request.method)
     return HttpResponse("This is the home page of Twitter chat bot. You can learn more about our app at our website.")
 
 def test_get_request(request):
