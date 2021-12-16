@@ -30,7 +30,7 @@ def check_delay():
             tweet_content = ''
 
 def post_tweet(tweet_content):
-    """Post tweet"""
+    """Wrapper for tweepy post tweet API"""
     CONSUMER_KEY = "Nw0ZC1zhdYQhPvWNP5QpZ2lo6"
     CONSUMER_SECRET = "nuzgy6dN1SfLoO9czlsGxv5HcpNIxTfRss8eiRS8vS1KOAszBs"
     ACCESS_TOKEN = "1465916201155317760-6uKnzE1jguNUurjMYD9atglCO5ejLq"

@@ -37,25 +37,17 @@ def bot_event_manager(request):
         response = JsonResponse(data)
         response.status_code = 200
         return response
-    # This method run when user send message
+    # This method run when user send message, Twitter webhook will send POST request to this method. The method has content type header: application/json; the body is a json object, type "bytes"
     if request.method == 'POST':
-        print("hello")
-        print(request)
+        print("Request content type", request.content_type)
+        print("Request content params", request.content_params)
+        # This part convert the json body -> python dict
         try:
-            data = json.loads(request.raw_post_data)
+            data = json.loads(request.body)
             print(data)
+            print("data type", type(data))
         except:
             print("cannot read using json.loads")
-        try:
-            data = request.json()
-            print(data)
-        except:
-            print("Cannot read using request.json()")
-        try:
-            body = request.body
-            print(body)
-        except:
-            print("Cannot use request.body")
         return HttpResponse(status=200)
 
 
