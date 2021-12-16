@@ -14,9 +14,10 @@ def index(request):
     return render(request, 'train_delay/index.html', context)
 
 
-def detail(request, id):
+def detail(request, operator_en, railway_en):
     context = {
-        'information': TrainInfo.objects.get(pk=id)
+        'information': TrainInfo.objects.get(operator_en=operator_en, railway_en=railway_en),
+        'operator_list': sorted(list(set([info.operator_ja for info in TrainInfo.objects.all()])))
     }
     
     return render(request, 'train_delay/detail.html', context)
