@@ -2,6 +2,7 @@ import threading
 from train_delay.database_util import check_last_update
 from train_delay.models import TrainInfo
 import tweepy
+import datetime
 
 def check_delay():
     check_last_update()
@@ -22,8 +23,11 @@ def check_delay():
     if len(delay_info) != 0:
         tweet_content = ''
         for delay_train in delay_info:
+            update_time = datetime.datetime.now().strftime("%H:%M")
+            tweet_content += '[{0}]\n'.format(update_time)
             tweet_content += '{0} : {1}\n'.format(delay_train[0], delay_train[1])
-        post_tweet(tweet_content)
+            post_tweet(tweet_content)
+            tweet_content = ''
 
 def post_tweet(tweet_content):
     """Post tweet"""
@@ -61,4 +65,5 @@ def print_test():
     print("Hello!!!")
 
 def start_worker():
+    """Worker will check train info every 5 min"""
     set_interval(check_delay, 60*5)
