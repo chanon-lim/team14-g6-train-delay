@@ -159,3 +159,7 @@ cython_debug/
 # gitignore for twitter-bot
 test
 test_twitter_bot
+test.py 
+message_received.json
+quickresponse_receive.json
+train_operator.json
