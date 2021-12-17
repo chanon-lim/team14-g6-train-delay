@@ -19,5 +19,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('train_delay.urls')),
-    path('trainbot', include('twitter_bot.urls')), # no need slash at 'trainbot/' because settings have APPEND_SLASH = False
+    path('line_bot/',include('line_bot.urls')),
+    path('trainbot', include('twitter_bot.urls')),
 ]
