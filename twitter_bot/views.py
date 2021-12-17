@@ -1,11 +1,10 @@
-from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 import base64
 import hashlib
 import hmac
 import json
 from django.views.decorators.csrf import csrf_exempt
-import requests
+from twitter_bot.dm_manager.event_manager import EventManager
 
 # Create your views here.
 def index(request):
@@ -23,7 +22,7 @@ def test_get_request(request):
 
 @csrf_exempt
 def bot_event_manager(request):
-    """Handling CRC events"""
+    """Handling CRC events and message event when user send DM. Twitter performs CRC test hourly to check the service running or not. The GET method is for handling CRC test"""
     CONSUMER_SECRET = b"nuzgy6dN1SfLoO9czlsGxv5HcpNIxTfRss8eiRS8vS1KOAszBs"
     if request.method == 'GET':
         crc_token = request.GET['crc_token']
@@ -39,15 +38,12 @@ def bot_event_manager(request):
         return response
     # This method run when user send message, Twitter webhook will send POST request to this method. The method has content type header: application/json; the body is a json object, type "bytes"
     if request.method == 'POST':
-        print("Request content type", request.content_type)
-        print("Request content params", request.content_params)
         # This part convert the json body -> python dict
-        try:
-            data = json.loads(request.body)
-            print(data)
-            print("data type", type(data))
-        except:
-            print("cannot read using json.loads")
+        msg_event = json.loads(request.body)
+        print(msg_event)
+        msg_event_manager = EventManager(msg_event)
+        msg_event_manager.handle_event()
+        print("data type", type(msg_event))
         return HttpResponse(status=200)
 
 

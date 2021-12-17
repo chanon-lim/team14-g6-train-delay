@@ -5,6 +5,7 @@ class TwitterBotConfig(AppConfig):
     name = 'twitter_bot'
 
     def ready(self):
+        """Run the worker after the django ready"""
         print("Run the worker")
         from twitter_bot.worker.post_delay_tweet import start_worker
         start_worker() 

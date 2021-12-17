@@ -16,11 +16,11 @@ def delay_notify_worker():
         previous_train_operation_status_json = fin.read()
         previous_all_train_operation_status_data = json.loads(previous_train_operation_status_json)
     for trainline in train_info:
-        current_operation_status = current_operation_state(trainline.information)
+        current_operation_status = current_operation_state(trainline.information_ja)
         if current_operation_status == 'delay':
-            previous_status = previous_all_train_operation_status_data[trainline.operator][trainline.railway]
+            previous_status = previous_all_train_operation_status_data[trainline.operator_ja][trainline.railway_ja]
             if previous_status != 'delay':
-                notify_info.append((trainline.railway, trainline.information))
+                notify_info.append((trainline.railway_ja, trainline.information_ja))
     if len(notify_info) != 0:
         for delay_train in notify_info:
             tweet_content = ''
@@ -44,13 +44,13 @@ def update_all_train_line_current_state(train_info):
     """After check delay, update the JSON file"""
     train_line_status = dict()
     for train in train_info:
-        print(train.operator)
-        current_train_operation_state = current_operation_state(train.information)
-        if train.operator not in train_line_status:
-            train_line_status[train.operator] = {}
-            train_line_status[train.operator][train.railway] = current_train_operation_state
-        if (train.operator in train_line_status) and (train.railway not in train_line_status[train.operator]):
-            train_line_status[train.operator][train.railway] = current_train_operation_state
+        print(train.operator_ja)
+        current_train_operation_state = current_operation_state(train.information_ja)
+        if train.operator_ja not in train_line_status:
+            train_line_status[train.operator_ja] = {}
+            train_line_status[train.operator_ja][train.railway_ja] = current_train_operation_state
+        if (train.operator_ja in train_line_status) and (train.railway_ja not in train_line_status[train.operator_ja]):
+            train_line_status[train.operator_ja][train.railway_ja] = current_train_operation_state
 
     train_line_status_json = json.dumps(train_line_status)
 
@@ -64,13 +64,13 @@ def generate_all_train_line_current_state():
     train_info = TrainInfo.objects.all()
     train_line_status = dict()
     for train in train_info:
-        print(train.operator)
-        current_train_operation_state = current_operation_state(train.information)
-        if train.operator not in train_line_status:
-            train_line_status[train.operator] = {}
-            train_line_status[train.operator][train.railway] = current_train_operation_state
-        if (train.operator in train_line_status) and (train.railway not in train_line_status[train.operator]):
-            train_line_status[train.operator][train.railway] = current_train_operation_state
+        print(train.operator_ja)
+        current_train_operation_state = current_operation_state(train.information_ja)
+        if train.operator_ja not in train_line_status:
+            train_line_status[train.operator_ja] = {}
+            train_line_status[train.operator_ja][train.railway_ja] = current_train_operation_state
+        if (train.operator_ja in train_line_status) and (train.railway_ja not in train_line_status[train.operator_ja]):
+            train_line_status[train.operator_ja][train.railway_ja] = current_train_operation_state
 
     train_line_status_json = json.dumps(train_line_status)
 

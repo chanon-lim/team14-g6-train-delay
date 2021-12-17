@@ -155,4 +155,7 @@ cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/django
 
+##################################
+# gitignore for twitter-bot
 test
+test_twitter_bot
