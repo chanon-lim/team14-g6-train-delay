@@ -138,5 +138,4 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# With this line, no need add slash in config/urls.py
-APPEND_SLASH = False
+
