@@ -49,7 +49,7 @@
                 {% for info in information %}
                 {% if info.operator_ja == operator %}
                 <div class="col-sm-12 col-md-6 col-lg-4">
-                    <div class="card train-info {% if info.information|length > 25 %}delay{% else %}normal{% endif %}">
+                    <div class="card train-info {% if info.information_ja != '平常運転' %}delay{% else %}normal{% endif %}">
                         <a href="{% url 'train_delay:detail' info.operator_en info.railway_en %}">
                             <div class="card-body">
                                 <div class="header">
@@ -58,7 +58,7 @@
                                     <h5 class="card-title">{{ info.railway_ja }}</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">{{ info.operator_ja }}</h6>
                                 </div>
-                                <p class="card-text">{{ info.information }}</p>
+                                <p class="card-text">{{ info.information_ja }}</p>
                             </div>
                         </a>
                     </div>

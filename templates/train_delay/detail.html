@@ -55,13 +55,13 @@
                     </tr>
                 </table>
                 <div class="card-body">
-                    {% if information.information == "平常運転" %}
+                    {% if information.information_ja == "平常運転" %}
                     <p><img src="{% static 'img/circle.png' %}" alt="normal" class="delay-icon"></p>
-                    <h3 class="card-text train-status">{{ information.information}}</h3>
+                    <h3 class="card-text train-status">{{ information.information_ja}}</h3>
                     {% else %}
                     <p><img src="{% static 'img/exclamation.png' %}" alt="delay" class="delay-icon"></p>
                     <h3 class="card-title train-status">遅延</h3>
-                    <p class="card-text">{{ information.information}}</p>
+                    <p class="card-text">{{ information.information_ja}}</p>
                     {% endif %}
                     
                     <div class="news">

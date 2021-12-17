@@ -194,7 +194,7 @@ a:hover, a:focus {
 }
 
 .detail .delay-icon {
-    margin: 1.5rem;
+    margin: 1.5rem 0 0.5rem;
     width: 100px;
     height: 100px;
 }
