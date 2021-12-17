@@ -74,7 +74,6 @@ a:hover, a:focus {
     padding: 0 0 0 0.6rem;
 }
 
-
 .section-nav ul {
     list-style: none;
     margin: 0;
@@ -168,19 +167,59 @@ a:hover, a:focus {
     text-align: center;
 }
 
-.detail .card .railway-icon {
+#detail-header .railway-icon {
     width: 32px;
     height: 32px;
 }
 
-.detail .card h5 {
-    margin-top: 10px;
+#detail-header {
+    width: 100%;
+    display: flex; 
+    text-align: left;
+    align-items: center;
+    justify-content: center;
 }
 
-.detail .card .delay-icon {
-    width: 128px;
-    height: 128px;
+
+#detail-header img {
+    margin-right: 10px;
 }
+
+#detail-header .header-text #railway-name {
+    font-size: 1.25rem;
+}
+
+#detail-header .header-text .mb-2.text-muted {
+    font-size: 0.9rem;
+}
+
+.detail .delay-icon {
+    margin: 1.5rem;
+    width: 100px;
+    height: 100px;
+}
+
+.detail .train-status {
+    font-weight: 600;
+}
+
+.news {
+    text-align: left;
+}
+
+.news .card-body .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.news .card-body .card-subtitle {
+    font-size: 0.8rem;
+}
+
+.news .card-body .card-text {
+    font-size: 0.9rem;
+}
+
 
 /* ---------- */
 /* Responsive */

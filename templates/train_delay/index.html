@@ -21,7 +21,7 @@
             <h1><a href="{% url 'train_delay:index' %}">Train Delay</a></h1>
             <div class="accordion" id="accordionPanelsStayOpenExample">
                 <div class="accordion-item">
-                    <div class="accordion-header" id="panelsStayOpen-headingOne">
+                    <div class="accordion-header" id="panelsStayOpen">
                         <a class="accordion-button" data-bs-toggle="collapse"
                             href="#collapseOperator" aria-expanded="true"
                             aria-controls="collapseOperator">
@@ -29,7 +29,7 @@
                         </a>
                     </div>
                     <div id="collapseOperator" class="accordion-collapse collapse show"
-                        aria-labelledby="panelsStayOpen-headingOne">
+                        aria-labelledby="panelsStayOpen">
                         <div class="accordion-body">
                             <ul>
                                 {% for operator in operator_list %}
