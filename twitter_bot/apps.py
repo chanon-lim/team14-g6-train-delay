@@ -8,4 +8,4 @@ class TwitterBotConfig(AppConfig):
         """Run the worker after the django ready"""
         print("Run the worker")
         from twitter_bot.worker.post_delay_tweet import start_worker
-        start_worker() 
+        # start_worker() 

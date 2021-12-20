@@ -78,6 +78,7 @@ def generate_all_train_line_current_state():
     with open("twitter_bot/worker/all_train_line_status.json", "w") as fout:
         fout.write(train_line_status_json)
 
+# will need to refactor, using the APIManager
 def post_tweet(tweet_content):
     """Wrapper for tweepy post tweet API"""
     CONSUMER_KEY = "Nw0ZC1zhdYQhPvWNP5QpZ2lo6"
