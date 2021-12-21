@@ -1,12 +1,81 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <title>Train Delay</title>
 </head>
+
 <body>
-    <h1>Hello Test</h1>
+    <div class="container-fluid">
+        <nav class="section-nav">
+            <h1><a href="{% url 'train_delay:index' %}">Train Delay</a></h1>
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                    <div class="accordion-header" id="panelsStayOpen">
+                        <a class="accordion-button" data-bs-toggle="collapse"
+                            href="#collapseOperator" aria-expanded="true"
+                            aria-controls="collapseOperator">
+                            運行情報
+                        </a>
+                    </div>
+                    <div id="collapseOperator" class="accordion-collapse collapse show"
+                        aria-labelledby="panelsStayOpen">
+                        <div class="accordion-body">
+                            <ul>
+                                {% for operator in operator_list %}
+                                <li><a href="#{{operator}}" class="operator-nav">{{ operator }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        {% for operator in operator_list %}
+        <section id="{{ operator }}">
+            <h2 class="operator">{{ operator }}</h2>
+            <div class="row">
+                {% for info in information %}
+                {% if info.operator_ja == operator %}
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="card train-info {% if info.information_ja != '平常運転' %}delay{% else %}normal{% endif %}">
+                        <a href="{% url 'train_delay:detail' info.operator_en info.railway_en %}">
+                            <div class="card-body">
+                                <div class="header">
+                                    <img src="{% static 'img/logo/'|add:info.operator_en|add:' '|add:info.railway_en|add:'.png' %}"
+                                        alt="{{ info.railway_en }}" class="railway-icon">
+                                    <h5 class="card-title">{{ info.railway_ja }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ info.operator_ja }}</h6>
+                                </div>
+                                <p class="card-text">{{ info.information_ja }}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        {% endfor %}
+    </div>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
+    <!-- JavaScript -->
+    <script src="{% static 'js/index.js' %}"></script>
 </body>
+
 </html>
