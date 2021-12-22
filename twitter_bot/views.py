@@ -5,6 +5,7 @@ import hmac
 import json
 from django.views.decorators.csrf import csrf_exempt
 from twitter_bot.dm_manager.event_manager import EventManager
+from twitter_bot.dm_manager import CONSUMER_SECRET
 
 # Create your views here.
 def index(request):
@@ -43,7 +44,6 @@ def bot_event_manager(request):
         print(msg_event)
         msg_event_manager = EventManager(msg_event)
         msg_event_manager.handle_event()
-        print("data type", type(msg_event))
         return HttpResponse(status=200)
 
 

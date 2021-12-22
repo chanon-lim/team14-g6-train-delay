@@ -1,5 +1,6 @@
 # This script provide EventManager object to handle DM events
 from twitter_bot.dm_manager.twitter_api_manager import APIManager
+from twitter_bot.dm_manager import TWITTER_BOT_ID
 
 class EventManager:
     api_manager = APIManager()
@@ -9,7 +10,12 @@ class EventManager:
 
     def handle_event(self):
         try:
-            recipient_id = ''
+            # The webhook will receive event when the bot send to user -> if that event create by the bot -> ignore that
+            event_sender_id = self.dm_event['direct_message_events'][0]['message_create']['sender_id']
+            if event_sender_id == TWITTER_BOT_ID:
+                return 0
+            
+            recipient_id = self.dm_event['direct_message_events'][0]['message_create']['sender_id']
             is_quickreply = 'quick_reply_response' in self.dm_event['direct_message_events'][0]['message_create']['message_data']
             print('quickrep?', is_quickreply)
             print('user command?', not(is_quickreply))
@@ -27,7 +33,7 @@ class EventManager:
                                 "metadata": "external_id_2"
                             }
                         ]
-                self.api_manager.send_direct_message(1465928035333713926, response, quick_reply_options=quickrep_option)
+                self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_option)
             else:
                 response = "Sorry we currently do not support user command, try using quickrep 🥺"
                 quickrep_option = [
@@ -42,8 +48,9 @@ class EventManager:
                                 "metadata": "external_id_4"
                             }
                         ]
-                self.api_manager.send_direct_message(1465928035333713926, response, quick_reply_options=quickrep_option)
-        except Exception:
-            print('Typing event')
+                self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_option)
+        except Exception as e:
+            print(e)
+            print('Other than create_message event')
 
 
