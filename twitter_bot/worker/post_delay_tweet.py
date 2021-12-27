@@ -5,11 +5,14 @@ import tweepy
 import datetime
 import json
 from twitter_bot.worker import NUMBER_OF_TRAINLINE
+import pytz
 
 PREVIOUS_TRAIN_OPERATION_STATUS_FILE_PATH = 'twitter_bot/worker/all_train_line_status.json'
 TRAIN_OPERATION_STATUS_PROTOTYPE_FILE_PATH = "twitter_bot/worker/all_train_line_status_prototype.json"
 
+# ugly, need refactor 
 def delay_notify_worker():
+    """Fetch the data from database server, check for delay, if there is delay -> post tweet + send DM to registered users"""
     print("==================")
     print(datetime.datetime.now())
     print("Start delay notify worker!")
@@ -52,15 +55,15 @@ def delay_notify_worker():
             update_all_train_line_current_state_when_database_update_fail(train_info, updated_time)
         
     # now post tweet
+    print(notify_info_to_tweet)
     if len(notify_info_to_tweet) != 0:
         for delay_train in notify_info_to_tweet:
             tweet_content = ''
-            update_time = datetime.datetime.now().strftime("%H:%M")
+            update_time = datetime.datetime.now(tz=pytz.timezone("Asia/Tokyo")).strftime("%H:%M")
             tweet_content += '[{0}]\n'.format(update_time)
             tweet_content += '{0} : {1}\n'.format(delay_train[0], delay_train[1])
             post_tweet(tweet_content)   
 
-    print(notify_info_to_tweet)
     print("delay_notify_worker ends")
 
 def delay_notify_worker2():

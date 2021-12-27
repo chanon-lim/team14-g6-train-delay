@@ -6,6 +6,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from twitter_bot.dm_manager.event_manager import EventManager
 from twitter_bot.dm_manager import CONSUMER_SECRET
+from twitter_bot.dm_manager.twitter_event import TwitterEvent
 
 # Create your views here.
 def index(request):
@@ -40,10 +41,10 @@ def bot_event_manager(request):
     # This method run when user send message, Twitter webhook will send POST request to this method. The method has content type header: application/json; the body is a json object, type "bytes"
     if request.method == 'POST':
         # This part convert the json body -> python dict
-        msg_event = json.loads(request.body)
-        print(msg_event)
-        msg_event_manager = EventManager(msg_event)
-        msg_event_manager.handle_event()
+        twitter_event = TwitterEvent(json.loads(request.body))
+        # print(json.loads(request.body))
+        twitter_event_manager = EventManager()
+        twitter_event_manager.handle_event(twitter_event)
         return HttpResponse(status=200)
 
 
