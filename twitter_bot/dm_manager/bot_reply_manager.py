@@ -171,9 +171,13 @@ class BotReplyManager:
         self.api_manager.send_direct_message(user_twitter_id, response, quick_reply_options=quickrep_options)
 
     def UNFOLLOW_DELAY_display_all_following_trainline(self, user_twitter_id):
-        response = "Select a trainline to unfollow"
         user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(user_twitter_id)
-        quickrep_options = self.quickreply_manager.UNFOLLOW_DELAY_show_all_following_trainline(user_followed_trainline)
+        if len(user_followed_trainline) == 0:
+            response = "You currently do not follow any trainline!"
+            quickrep_options = self.quickreply_manager.home_options()
+        else:
+            response = "Select a trainline to unfollow"
+            quickrep_options = self.quickreply_manager.UNFOLLOW_DELAY_show_all_following_trainline(user_followed_trainline)
         self.api_manager.send_direct_message(user_twitter_id, response, quick_reply_options=quickrep_options)
 
     def current_operation_state(self, train_line_information):

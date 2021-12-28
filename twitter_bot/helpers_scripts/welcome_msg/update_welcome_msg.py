@@ -33,6 +33,11 @@ updated_data = {
                         'label': '🔔 Follow train line status',
                         'description': 'Get notified when delay in a train line occur',
                         'metadata': 'follow_delay#show_all_operator'
+                    },
+                    {
+                        'label': '❌ Unfollow trainline',
+                        'description': 'Unfollow to stop receiving DM when delay occur',
+                        'metadata': 'unfollow_delay#show_all_following_trainline'
                     }
                 ]
             }

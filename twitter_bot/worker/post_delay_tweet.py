@@ -105,7 +105,7 @@ def DEV_delay_notify_worker():
         last_updated_time = datetime.datetime.strptime(last_updated_time, '%Y-%m-%d %H:%M')
     if database_updated_sucessfully:
         # if last update is longer than 6 min -> cannot use old delay data to compare
-        if (updated_time - last_updated_time) > datetime.timedelta(minutes=1):
+        if (updated_time - last_updated_time) > datetime.timedelta(minutes=6):
             for trainline in train_info:
                 current_operation_status = current_operation_state(trainline.information_ja)
                 if current_operation_status == 'delay':
@@ -123,7 +123,7 @@ def DEV_delay_notify_worker():
                     normal_info_DEV.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
             update_all_train_line_current_state(train_info, updated_time)
     else: # if not update successfully
-        if (updated_time - last_updated_time) > datetime.timedelta(minutes=1):
+        if (updated_time - last_updated_time) > datetime.timedelta(minutes=6):
             for trainline in train_info:
                 current_operation_status = current_operation_state(trainline.information_ja)
                 if current_operation_status == 'delay':
@@ -270,7 +270,7 @@ def post_tweet(tweet_content):
     except:
         print("Error")
 
-    api.update_status(tweet_content)
+    api.update_status(tweet_content, attachment_url="https://twitter.com/messages/compose?recipient_id=1465916201155317760")
 
 
 def set_interval(func, sec):
