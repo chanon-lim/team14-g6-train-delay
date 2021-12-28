@@ -90,7 +90,13 @@ class EventManager:
                 trainline_name = quickrep_metadata[3]
                 page = int(quickrep_metadata[4])
                 self.bot_reply_manager.FOLLOW_DELAY_show_trainline_follow_status(recipient_id, operator_name, trainline_name, page)
-
+        if quickrep_metadata[0] == "unfollow_delay":
+            if "unfollow_specific_trainline" in quickrep_metadata:
+                operator_name = quickrep_metadata[2]
+                trainline_name = quickrep_metadata[3]
+                self.bot_reply_manager.UNFOLLOW_DELAY_unfollow_specific_trainline(recipient_id, operator_name, trainline_name)
+            if "show_all_following_trainline" in quickrep_metadata:
+                self.bot_reply_manager.UNFOLLOW_DELAY_display_all_following_trainline(recipient_id)
     # now when user send smt -> return to top menu, for testing only
     def handle_dm_user_cmd_event(self, dm_event: DMEvent):
         recipient_id = dm_event.get_recipient_id()

@@ -12,11 +12,11 @@ class QuickrepOptionManager:
                     "description": "Return to top",
                     "metadata": "home"
                 },
-                {
-                    "label": "❓ Help",
-                    "description": "Do you need help?",
-                    "metadata": "help"
-                }
+                # {
+                #     "label": "❓ Help",
+                #     "description": "Do you need help?",
+                #     "metadata": "help"
+                # }
         ]
         return default_option
 
@@ -321,6 +321,25 @@ class QuickrepOptionManager:
         """After showing follow status, give the options of all current trainlines"""
         return self.FOLLOW_DELAY_all_trainline_of_specific_operator_options(user_followed_trainline, operator_name, page)
 
+    #########################################
+    # Unfollow delay part
+    #########################################
+    def UNFOLLOW_DELAY_show_all_following_trainline(self, user_followed_trainline):
+        """Display list of current following trainline"""
+        quickrep_options = []
+        number = 1
+        for operator in user_followed_trainline:
+            for trainline in user_followed_trainline[operator]:
+                quickrep_option = {
+                'label': f"❌ {number}. {trainline} ({operator})",
+                'description': f'Click to unfollow the trainline',
+                'metadata': f'unfollow_delay#unfollow_specific_trainline#{operator}#{trainline}'
+                }
+                quickrep_options.append(quickrep_option)
+                number += 1
+        quickrep_options.extend(self.default_options())
+        return quickrep_options
+
     def home_options(self):
         quickrep_options = [
             {
@@ -337,6 +356,11 @@ class QuickrepOptionManager:
                 'label': '🔔 Follow train line status',
                 'description': 'Get notified when delay in a train line occur',
                 'metadata': f'follow_delay#show_all_operator'
+            },
+            {
+                'label': '❌ Unfollow trainline',
+                'description': 'Unfollow to stop receiving DM when delay occur',
+                'metadata': 'unfollow_delay#show_all_following_trainline'
             }
         ]
         return quickrep_options

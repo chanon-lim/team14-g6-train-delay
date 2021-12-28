@@ -3,7 +3,6 @@ from twitter_bot.dm_manager.twitter_api_manager import APIManager
 from .quick_reply_manager import QuickrepOptionManager
 from train_delay.models import TrainInfo
 from twitter_bot.models import UserRegistration
-from twitter_bot.worker.post_delay_tweet import current_operation_state
 
 class TrainFollowerManager:
     def __init__(self):
@@ -39,6 +38,11 @@ class TrainFollowerManager:
         new_record = UserRegistration(user_twitter_id=user_twitter_id, followed_operator_name=operator_name, followed_trainline_name=trainline_name)
         new_record.save()  
 
+    def unfollow_a_following_trainline(self, user_twitter_id, operator_name, trainline_name):
+        """Delete the record of a specific operator_name, user_twitter_id, trainline_name from the database"""
+        target_following_trainline = UserRegistration.objects.all().filter(user_twitter_id=user_twitter_id, followed_trainline_name=trainline_name, followed_operator_name=operator_name)
+        target_following_trainline.delete()
+
 class BotReplyManager:
     api_manager = APIManager() 
     quickreply_manager = QuickrepOptionManager()
@@ -71,7 +75,7 @@ class BotReplyManager:
         quickrep_options = self.quickreply_manager.CHECK_DELAY_show_trainline_delay_status_options(operator_name, trainline_name, page)
         try:
             trainline_status_object = TrainInfo.objects.filter(operator_ja=operator_name).filter(railway_ja=trainline_name)[0]
-            trainline_status = current_operation_state(trainline_status_object.information_ja)
+            trainline_status = self.current_operation_state(trainline_status_object.information_ja)
             if trainline_status == "normal":
                 response = f"🟢 {trainline_status_object.railway_ja}: {trainline_status_object.information_ja}"
             else:
@@ -120,3 +124,69 @@ class BotReplyManager:
         user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(recipient_id)
         quickrep_options = self.quickreply_manager.FOLLOW_DELAY_show_trainline_follow_status_options(user_followed_trainline, operator_name, trainline_name, page)
         self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
+
+    def DEV_NOTIFY_NORMAL_notify_trainline_normal_to_follower(self, all_normal_data):
+        """For testing, will send DM when following trainline operation is normal"""
+        for normal_data in all_normal_data:
+            trainline_name = normal_data[0]
+            operator_name = normal_data[2]
+            normal_info = normal_data[1]
+            followers = UserRegistration.objects.all().filter(followed_trainline_name=trainline_name).filter(followed_operator_name=operator_name)
+            if len(followers) != 0:
+                followers_id_list = [follower.user_twitter_id for follower in followers]
+                for id in followers_id_list:
+                    print(f"\n\n!!! sent DM to user \n\n")
+                    response = f"📢✔✔ {trainline_name}: {normal_info} NORMAL"
+                    quickrep_options = self.quickreply_manager.home_options()
+                    self.api_manager.send_direct_message(recipient_id=id, text=response, quick_reply_options=quickrep_options)   
+
+    def NOTIFY_DELAY_notify_trainline_delay_to_follower(self, all_delay_data):
+        """Get the trainline follower from the TrainFollowerManager then send DM to
+        
+        @all_delay_data: list of tuple in form [(railway_ja, information_ja, operator_ja)]"""
+        for delay_data in all_delay_data:
+            trainline_name = delay_data[0]
+            operator_name = delay_data[2]
+            delay_info = delay_data[1]
+            followers = UserRegistration.objects.all().filter(followed_trainline_name=trainline_name).filter(followed_operator_name=operator_name)
+            if len(followers) != 0:
+                followers_id_list = [follower.user_twitter_id for follower in followers]
+                for id in followers_id_list:
+                    print(f"\n\n!!! sent DM to user \n\n")
+                    response = f"📢 {trainline_name}: {delay_info}"
+                    quickrep_options = self.quickreply_manager.home_options()
+                    self.api_manager.send_direct_message(recipient_id=id, text=response, quick_reply_options=quickrep_options)
+
+    ############################
+    # Unfollow trainline
+    ############################
+
+    def UNFOLLOW_DELAY_unfollow_specific_trainline(self, user_twitter_id, operator_name, trainline_name):
+        """Unfollow a specific trainline"""
+        self.train_follower_manager.unfollow_a_following_trainline(user_twitter_id, operator_name, trainline_name)
+        
+        response = f"The trainline {trainline_name} is unfollowed!"
+        user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(user_twitter_id)
+        quickrep_options = self.quickreply_manager.UNFOLLOW_DELAY_show_all_following_trainline(user_followed_trainline)
+        self.api_manager.send_direct_message(user_twitter_id, response, quick_reply_options=quickrep_options)
+
+    def UNFOLLOW_DELAY_display_all_following_trainline(self, user_twitter_id):
+        response = "Select a trainline to unfollow"
+        user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(user_twitter_id)
+        quickrep_options = self.quickreply_manager.UNFOLLOW_DELAY_show_all_following_trainline(user_followed_trainline)
+        self.api_manager.send_direct_message(user_twitter_id, response, quick_reply_options=quickrep_options)
+
+    def current_operation_state(self, train_line_information):
+        """Return 'delay' or 'normal' state based on current given trainline information"""
+        normal_states = ['平常', '現在、１５分以上の遅延はありません']
+        for state in normal_states:
+            if state in train_line_information:
+                return 'normal'
+        return 'delay'
+
+
+
+
+
+
+
