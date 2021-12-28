@@ -19,7 +19,7 @@ def delay_notify_worker():
     database_updated_sucessfully = update_database()
     updated_time = datetime.datetime.now()
     train_info = TrainInfo.objects.all()
-    notify_info_to_tweet = [] # what will be posted in tweet
+    notify_info_to_tweet = [] # what will be posted in tweet, list of tuple [()]
     with open(PREVIOUS_TRAIN_OPERATION_STATUS_FILE_PATH, 'r', encoding="utf-8") as fin:
         previous_train_operation_status_json = fin.read()
         previous_all_train_operation_status_data = json.loads(previous_train_operation_status_json)
@@ -65,31 +65,6 @@ def delay_notify_worker():
             post_tweet(tweet_content)   
 
     print("delay_notify_worker ends")
-
-def delay_notify_worker2():
-    print("delay_notify_worker starts!")
-    check_last_update()
-    train_info = TrainInfo.objects.all()
-    notify_info = [] # what will be posted in tweet
-    with open(PREVIOUS_TRAIN_OPERATION_STATUS_FILE_PATH, 'r') as fin:
-        previous_train_operation_status_json = fin.read()
-        previous_all_train_operation_status_data = json.loads(previous_train_operation_status_json)
-    for trainline in train_info:
-        current_operation_status = current_operation_state(trainline.information_ja)
-        if current_operation_status == 'delay':
-            previous_status = previous_all_train_operation_status_data[trainline.operator_ja][trainline.railway_ja]
-            if previous_status != 'delay':
-                notify_info.append((trainline.railway_ja, trainline.information_ja))
-    if len(notify_info) != 0:
-        for delay_train in notify_info:
-            tweet_content = ''
-            update_time = datetime.datetime.now().strftime("%H:%M")
-            tweet_content += '[{0}]\n'.format(update_time)
-            tweet_content += '{0} : {1}\n'.format(delay_train[0], delay_train[1])
-            post_tweet(tweet_content)
-    print("notify_info", notify_info)
-    update_all_train_line_current_state(train_info)
-    print("delay_notify_worker finishes!")
 
 def update_database():
     """Update the database and return True if successful, False otherwise. Will try 3 times. Success is when the train num is 86"""

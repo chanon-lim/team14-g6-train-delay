@@ -44,6 +44,7 @@ class BotReplyManager:
     quickreply_manager = QuickrepOptionManager()
     train_follower_manager = TrainFollowerManager()
     def __init__(self):
+        """Handle DM activities of bot"""
         pass
 
     def visit_website(self, recipient_id):
@@ -100,7 +101,7 @@ class BotReplyManager:
     def FOLLOW_DELAY_show_all_trainline_of_specific_operator(self, recipient_id, operator_name, page=0):
         """Show list of all trainline in a specific operator name, eg all trainline of JREast"""
         user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(recipient_id)
-        quickrep_options = self.quickreply_manager.FOLLOW_DELAY_all_trainline_of_specific_operator_options(operator_name, page)
+        quickrep_options = self.quickreply_manager.FOLLOW_DELAY_all_trainline_of_specific_operator_options(user_followed_trainline, operator_name, page)
         response = "Choose a trainline to follow its delay status"
         self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
 
@@ -108,12 +109,14 @@ class BotReplyManager:
         """If the user already follow a trainline -> send already followed, if not, notify follow successfully"""
         print(f"FOLLOW_DELAY_show_trainline_follow_status run!!")
         print(f"\nFollowed trainline: {self.train_follower_manager.get_all_trainline_follow_of_user(recipient_id)}")
-        user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(recipient_id)
-        quickrep_options = self.quickreply_manager.FOLLOW_DELAY_show_trainline_follow_status_options(operator_name, trainline_name, page)
         already_followed = self.train_follower_manager.get_follow_status_of(recipient_id, operator_name, trainline_name) == 'already'
+
         if already_followed:
             response = "You already followed this trainline! Let's follow other trainline!"
         else:
             self.train_follower_manager.register_new_follow(recipient_id, operator_name, trainline_name)
             response = "You followed this trainline!"
+
+        user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(recipient_id)
+        quickrep_options = self.quickreply_manager.FOLLOW_DELAY_show_trainline_follow_status_options(user_followed_trainline, operator_name, trainline_name, page)
         self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)

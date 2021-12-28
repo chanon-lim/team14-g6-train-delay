@@ -175,7 +175,7 @@ class QuickrepOptionManager:
         quickrep_options.extend(self.default_options())
         return quickrep_options
 
-    def FOLLOW_DELAY_all_trainline_of_specific_operator_options(self, operator_name, page=0):
+    def FOLLOW_DELAY_all_trainline_of_specific_operator_options(self, user_followed_trainline, operator_name, page=0):
         """Return list of all railway in a specific operator_name
         
         @page: Twitter only allow quick reply max 20 entries. If have more, must separate different pages -> eg JREast has 37 trainlines -> need parameter page"""
@@ -183,22 +183,28 @@ class QuickrepOptionManager:
         all_train_lines_in_operator = ALL_TRAIN_LINES[operator_name][start_index:]
 
         if (page == 0) and (len(all_train_lines_in_operator) <= 17):
-            return self.FOLLOW_DELAY_all_trainline_of_specific_operator_one_page_options(operator_name)
+            return self.FOLLOW_DELAY_all_trainline_of_specific_operator_one_page_options( user_followed_trainline, operator_name)
         elif (page == 0) and (len(all_train_lines_in_operator) > 17):
-            return self.FOLLOW_DELAY_all_trainline_of_specific_operator_first_page_options(operator_name)
+            return self.FOLLOW_DELAY_all_trainline_of_specific_operator_first_page_options(user_followed_trainline, operator_name)
         elif (page != 0) and (len(all_train_lines_in_operator) > 17):
-            return self.FOLLOW_DELAY_all_trainline_of_specific_operator_middle_page_options(operator_name, page)
+            return self.FOLLOW_DELAY_all_trainline_of_specific_operator_middle_page_options(user_followed_trainline, operator_name, page)
         else:
-            return self.FOLLOW_DELAY_all_trainline_of_specific_operator_last_page_options(operator_name, page)
+            return self.FOLLOW_DELAY_all_trainline_of_specific_operator_last_page_options(user_followed_trainline, operator_name, page)
 
-    def FOLLOW_DELAY_all_trainline_of_specific_operator_one_page_options(self, operator_name):
+    def FOLLOW_DELAY_all_trainline_of_specific_operator_one_page_options(self, user_followed_trainline, operator_name):
         quickrep_options = []
         all_train_lines_in_operator = ALL_TRAIN_LINES[operator_name]
 
         # if operator has <= 17 trainlines
         for number, trainline in enumerate(all_train_lines_in_operator, start=1):
+            # check if a trainline is followed or not, change label depend on that
+            if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
+                quickrep_label = f'🔔👌 {number}. {trainline} [Followed]'
+            else:
+                quickrep_label = f'🔔 {number}. {trainline}'
+
             quickrep_option = {
-                'label': f'🔔 {number}. {trainline}',
+                'label': quickrep_label,
                 'description': f'Click to follow the delay status of {trainline} trainline',
                 'metadata': f'follow_delay#follow_status_of#{operator_name}#{trainline}#0'
                 # the last number 0 is the page number, because one page -> 0
@@ -215,14 +221,20 @@ class QuickrepOptionManager:
         quickrep_options.extend(self.default_options())
         return quickrep_options    
 
-    def FOLLOW_DELAY_all_trainline_of_specific_operator_first_page_options(self, operator_name):
+    def FOLLOW_DELAY_all_trainline_of_specific_operator_first_page_options(self,user_followed_trainline, operator_name):
         """Quick reply when number of item > 20 and is the first page, have 'Next' option"""
         quickrep_options = []
         # because have 'Next', 'Back', 2 default buttons -> 16 options remaining
         all_train_lines_in_operator = ALL_TRAIN_LINES[operator_name][:16]
         for number, trainline in enumerate(all_train_lines_in_operator, start=1):
+            # check if a trainline is followed or not, change label depend on that
+            if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
+                quickrep_label = f'🔔👌 {number}. {trainline} [Followed]'
+            else:
+                quickrep_label = f'🔔 {number}. {trainline}'
+
             quickrep_option = {
-                'label': f'🔔 {number}. {trainline}',
+                'label': quickrep_label,
                 'description': f'Click to follow the delay status of {trainline} trainline',
                 'metadata': f'follow_delay#follow_status_of#{operator_name}#{trainline}#0'
             }
@@ -243,14 +255,20 @@ class QuickrepOptionManager:
         quickrep_options.extend(self.default_options())
         return quickrep_options
 
-    def FOLLOW_DELAY_all_trainline_of_specific_operator_middle_page_options(self, operator_name, page:int):
+    def FOLLOW_DELAY_all_trainline_of_specific_operator_middle_page_options(self, user_followed_trainline, operator_name, page:int):
         quickrep_options = []
         # because have 'Next', 'Back', 2 default buttons -> 16 options remaining
         start_index = page*16
         all_train_lines_in_operator = ALL_TRAIN_LINES[operator_name][start_index:start_index+16]
         for number, trainline in enumerate(all_train_lines_in_operator, start=start_index+1):
+            # check if a trainline is followed or not, change label depend on that
+            if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
+                quickrep_label = f'🔔👌 {number}. {trainline} [Followed]'
+            else:
+                quickrep_label = f'🔔 {number}. {trainline}'
+
             quickrep_option = {
-                'label': f'🔔 {number}. {trainline}',
+                'label': quickrep_label,
                 'description': f'Click to follow the delay status of {trainline} trainline',
                 'metadata': f'follow_delay#follow_status_of#{operator_name}#{trainline}#{page}'
             }
@@ -271,14 +289,20 @@ class QuickrepOptionManager:
         quickrep_options.extend(self.default_options())
         return quickrep_options
 
-    def FOLLOW_DELAY_all_trainline_of_specific_operator_last_page_options(self, operator_name, page:int):
+    def FOLLOW_DELAY_all_trainline_of_specific_operator_last_page_options(self, user_followed_trainline, operator_name, page:int):
         quickrep_options = []
         # because have 'Next', 'Back', 2 default buttons -> 16 options remaining
         start_index = page*16
         all_train_lines_in_operator = ALL_TRAIN_LINES[operator_name][start_index:]
         for number, trainline in enumerate(all_train_lines_in_operator, start=start_index+1):
+            # check if a trainline is followed or not, change label depend on that
+            if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
+                quickrep_label = f'🔔👌 {number}. {trainline} [Followed]'
+            else:
+                quickrep_label = f'🔔 {number}. {trainline}'
+        
             quickrep_option = {
-                'label': f'🔔 {number}. {trainline}',
+                'label': quickrep_label,
                 'description': f'Click to follow the delay status of {trainline} trainline',
                 'metadata': f'follow_delay#follow_status_of#{operator_name}#{trainline}#{page}'
             }
@@ -293,9 +317,9 @@ class QuickrepOptionManager:
         quickrep_options.extend(self.default_options())
         return quickrep_options
 
-    def FOLLOW_DELAY_show_trainline_follow_status_options(self, operator_name, trainline_name, page):
+    def FOLLOW_DELAY_show_trainline_follow_status_options(self, user_followed_trainline, operator_name, trainline_name, page):
         """After showing follow status, give the options of all current trainlines"""
-        return self.FOLLOW_DELAY_all_trainline_of_specific_operator_options(operator_name, page)
+        return self.FOLLOW_DELAY_all_trainline_of_specific_operator_options(user_followed_trainline, operator_name, page)
 
     def home_options(self):
         quickrep_options = [
