@@ -20,7 +20,7 @@ updated_data = {
                 "type": "options",
                 "options": [
                     {
-                        'label': '💻 Visit website',
+                        'label': '🌐 Visit website',
                         'description': 'Visit train delay website for more details...',
                         'metadata': 'visit_website'
                     },
@@ -32,7 +32,7 @@ updated_data = {
                     {
                         'label': '🔔 Follow train line status',
                         'description': 'Get notified when delay in a train line occur',
-                        'metadata': 'follow_delay_info'
+                        'metadata': 'follow_delay#show_all_operator'
                     }
                 ]
             }
