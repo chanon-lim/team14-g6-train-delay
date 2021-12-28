@@ -171,13 +171,16 @@ def send_delay_data_and_dm_users_from(bot_reply_manager: BotReplyManager, delay_
 
 def update_database():
     """Update the database and return True if successful, False otherwise. Will try 3 times. Success is when the train num is 86"""
+    print("Start update database")
     database_update_try = 0
     while database_update_try < 3:
         check_last_update()
         train_info = TrainInfo.objects.all()
         if len(train_info) == NUMBER_OF_TRAINLINE:
+            print("Finish update database")
             return True
         database_update_try += 1
+    print("Finish update database")
     return False
 
 def current_operation_state(train_line_information):
@@ -289,4 +292,6 @@ def print_test():
 
 def start_worker():
     """Worker will check train info every 5 min"""
+    initial_db_update_thread = threading.Thread(target=update_database, daemon=True)
+    initial_db_update_thread.start()
     set_interval(DEV_delay_notify_worker, 60*5)
