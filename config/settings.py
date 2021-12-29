@@ -77,9 +77,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-MONGODB_URI = "mongodb+srv://p:p@cluster0.hgt7v.mongodb.net/g6t14traindelay?retryWrites=true&w=majority"
+# MONGODB_URI = "mongodb+srv://p:p@cluster0.hgt7v.mongodb.net/g6t14traindelay?retryWrites=true&w=majority"
 
-MONGODB_URI = "mongodb+srv://p:p@cluster0.hgt7v.mongodb.net/g6t14traindelay?retryWrites=true&w=majority"
+# MONGODB_URI = "mongodb+srv://p:p@cluster0.hgt7v.mongodb.net/g6t14traindelay?retryWrites=true&w=majority"
+
+MONGODB_URI = "mongodb+srv://p:p@cluster0.ldjyq.mongodb.net/t6g14traindelay?retryWrites=true&w=majority"
 
 DATABASES = {
     "default": {
@@ -142,5 +144,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-django_heroku.settings(locals()) 
+# django_heroku.settings(locals()) 
 
