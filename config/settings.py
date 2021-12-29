@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 import django_heroku
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,12 +27,13 @@ SECRET_KEY = 'django-insecure-4uje&t8^*_j-bxg3xl)o&qu=(u7x%+c#i8ubuv()#-u+_8q(2q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# ALLOWED_HOSTS = ['localhost', '0.0.0.0', 'train-delay-chien.herokuapp.com']
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,8 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'train_delay',
-    'twitter_bot',
     'line_bot',
+    'twitter_bot'
 ]
 
 MIDDLEWARE = [
@@ -77,9 +79,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-# MONGODB_URI = "mongodb+srv://p:p@cluster0.hgt7v.mongodb.net/g6t14traindelay?retryWrites=true&w=majority"
-
-# MONGODB_URI = "mongodb+srv://p:p@cluster0.hgt7v.mongodb.net/g6t14traindelay?retryWrites=true&w=majority"
 
 MONGODB_URI = "mongodb+srv://p:p@cluster0.ldjyq.mongodb.net/t6g14traindelay?retryWrites=true&w=majority"
 
@@ -134,6 +133,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+if not DEBUG: 
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
@@ -143,6 +147,4 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # django_heroku.settings(locals()) 
-
