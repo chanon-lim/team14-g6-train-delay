@@ -70,13 +70,9 @@ def delay_notify_worker():
         
     # now post tweet and notify users through DM
     print(notify_info_to_tweet)
-    print(f"Normal operation info: {normal_info_DEV}")
-    if len(normal_info_DEV) != 0:
-        DEV_send_normal_data_and_dm_users_from(bot_reply_manager, normal_data=normal_info_DEV)
-
     if len(notify_info_to_tweet) != 0:
         # send DM
-        # send_delay_data_and_dm_users_from(bot_reply_manager, delay_data=notify_info_to_tweet)
+        send_delay_data_and_dm_users_from(bot_reply_manager, delay_data=notify_info_to_tweet)
         
         # tweet
         for delay_train in notify_info_to_tweet:
@@ -160,8 +156,6 @@ def DEV_delay_notify_worker():
             post_tweet(tweet_content)   
 
     print("delay_notify_worker ends")
-
-
 
 def DEV_send_normal_data_and_dm_users_from(bot_reply_manager: BotReplyManager, normal_data):
     bot_reply_manager.DEV_NOTIFY_NORMAL_notify_trainline_normal_to_follower(normal_data)
@@ -294,4 +288,4 @@ def start_worker():
     """Worker will check train info every 5 min"""
     initial_db_update_thread = threading.Thread(target=update_database, daemon=True)
     initial_db_update_thread.start()
-    set_interval(DEV_delay_notify_worker, 60*5)
+    set_interval(delay_notify_worker, 60*5)
