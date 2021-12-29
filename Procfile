@@ -1,2 +1,1 @@
-web: python --version
-web: gunicorn config.wsgi --log-file - 
+web: gunicorn config.wsgi --preload
