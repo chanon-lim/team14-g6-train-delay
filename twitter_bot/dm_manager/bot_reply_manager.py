@@ -137,12 +137,11 @@ class BotReplyManager:
             followers = UserRegistration.objects.all().filter(followed_trainline_name=trainline_name).filter(followed_operator_name=operator_name)
             if len(followers) != 0:
                 followers_id_list = [follower.user_twitter_id for follower in followers]
-                response = ""
                 for id in followers_id_list:
                     print(f"\n\n!!! sent DM to user \n\n")
-                    response += f"📢✔✔ {trainline_name}: {normal_info} NORMAL\n"
-                quickrep_options = self.quickreply_manager.home_options()
-                self.api_manager.send_direct_message(recipient_id=id, text=response, quick_reply_options=quickrep_options)   
+                    response = f"📢✔✔ {trainline_name}: {normal_info} NORMAL\n"
+                    quickrep_options = self.quickreply_manager.home_options()
+                    self.api_manager.send_direct_message(recipient_id=id, text=response, quick_reply_options=quickrep_options)   
 
     def NOTIFY_DELAY_notify_trainline_delay_to_follower(self, all_delay_data):
         """Get the trainline follower from the TrainFollowerManager then send DM to
@@ -155,12 +154,11 @@ class BotReplyManager:
             followers = UserRegistration.objects.all().filter(followed_trainline_name=trainline_name).filter(followed_operator_name=operator_name)
             if len(followers) != 0:
                 followers_id_list = [follower.user_twitter_id for follower in followers]
-                response = ""
                 for id in followers_id_list:
                     print(f"\n\n!!! sent DM to user \n\n")
-                    response += f"📢 {trainline_name}: {delay_info}\n"
-                quickrep_options = self.quickreply_manager.home_options()
-                self.api_manager.send_direct_message(recipient_id=id, text=response, quick_reply_options=quickrep_options)
+                    response = f"📢 {trainline_name}: {delay_info}\n"
+                    quickrep_options = self.quickreply_manager.home_options()
+                    self.api_manager.send_direct_message(recipient_id=id, text=response, quick_reply_options=quickrep_options)
 
     ############################
     # Unfollow trainline
