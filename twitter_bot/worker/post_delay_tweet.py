@@ -78,8 +78,14 @@ def delay_notify_worker():
         for delay_train in notify_info_to_tweet:
             tweet_content = ''
             update_time = datetime.datetime.now(tz=pytz.timezone("Asia/Tokyo")).strftime("%H:%M")
+            train_line_name = delay_train[0]
+            delay_info = delay_train[1]
+            # max number of character for tweet in Japanese
+            if len(delay_info) >= 110:
+                delay_info_split = delay_info.split("。")
+                delay_info = delay_info_split[0]
             tweet_content += '[{0}]\n'.format(update_time)
-            tweet_content += '{0} : {1}\n'.format(delay_train[0], delay_train[1])
+            tweet_content += '{0} : {1}\n～～～\n他の機能ために、メセンジー送ってください。'.format(train_line_name, delay_info)
             post_tweet(tweet_content)   
 
     print("delay_notify_worker ends")
