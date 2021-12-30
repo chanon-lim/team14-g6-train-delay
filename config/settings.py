@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'train_delay',
-    'line_bot',
     'twitter_bot'
 ]
 
