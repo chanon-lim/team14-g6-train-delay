@@ -6,7 +6,7 @@ import requests
 
 # Create your views here.
 def index(request):
-    check_last_update()
+    # check_last_update()
     train_info =  TrainInfo.objects.all()
     context = {
         'information': train_info,
@@ -17,7 +17,7 @@ def index(request):
 
 
 def detail(request, operator_en, railway_en):
-    check_last_update()
+    # check_last_update()
     
     this_railway = TrainInfo.objects.get(operator_en=operator_en, railway_en=railway_en)
     response = requests.get(f"https://news.yahoo.co.jp/search?p={this_railway.railway_ja}&ei=utf-8")
