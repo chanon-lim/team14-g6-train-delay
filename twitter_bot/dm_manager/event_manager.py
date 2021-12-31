@@ -62,9 +62,15 @@ class EventManager:
                 option_page = int(quickrep_metadata[4])
                 operator_name = quickrep_metadata[3]
                 self.bot_reply_manager.FOLLOW_DELAY_show_all_trainline_of_specific_operator(recipient_id, operator_name, option_page)
+            if quickrep_metadata[1] == "unfollow_delay":
+                page = int(quickrep_metadata[4])
+                self.bot_reply_manager.UNFOLLOW_DELAY_display_all_following_trainline(recipient_id, page)
         if quickrep_metadata[0] == "return_to":
             # there are 2 cases when hit 'BACK' button: return to all operator when only 1 page of trainline OR return to previous page of trainline
-            if quickrep_metadata[1] == "follow_delay":
+            if quickrep_metadata[1] == "unfollow_delay":
+                page = int(quickrep_metadata[4])
+                self.bot_reply_manager.UNFOLLOW_DELAY_display_all_following_trainline(recipient_id, page)
+            elif quickrep_metadata[1] == "follow_delay":
                 if "show_all_operator" in quickrep_metadata:
                     self.bot_reply_manager.FOLLOW_DELAY_show_all_operators_list(recipient_id)
                 if "show_all_trainline_in" in quickrep_metadata:
@@ -94,9 +100,10 @@ class EventManager:
             if "unfollow_specific_trainline" in quickrep_metadata:
                 operator_name = quickrep_metadata[2]
                 trainline_name = quickrep_metadata[3]
-                self.bot_reply_manager.UNFOLLOW_DELAY_unfollow_specific_trainline(recipient_id, operator_name, trainline_name)
+                page = int(quickrep_metadata[5])
+                self.bot_reply_manager.UNFOLLOW_DELAY_unfollow_specific_trainline(recipient_id, operator_name, trainline_name, page)
             if "show_all_following_trainline" in quickrep_metadata:
-                self.bot_reply_manager.UNFOLLOW_DELAY_display_all_following_trainline(recipient_id)
+                self.bot_reply_manager.UNFOLLOW_DELAY_display_all_following_trainline(recipient_id, 0)
     
     # now when user send smt -> return to top menu, for testing only
     def handle_dm_user_cmd_event(self, dm_event: DMEvent):

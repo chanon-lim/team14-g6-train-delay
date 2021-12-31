@@ -324,22 +324,130 @@ class QuickrepOptionManager:
     #########################################
     # Unfollow delay part
     #########################################
-    def UNFOLLOW_DELAY_show_all_following_trainline(self, user_followed_trainline):
-        """Display list of current following trainline"""
+    def UNFOLLOW_DELAY_show_all_following_trainline(self, user_followed_trainline_dict, page:int):
+        """@user_followed_trainline_dict in form {operator: [trainline1, trainline2,..]...}"""
+        # change from the dict -> list [(operator1, trainline1), (operator2, trainline2)]
+        user_followed_trainline = []
+        for operator in user_followed_trainline_dict:
+            operator_trainlines = user_followed_trainline_dict[operator]
+            for trainline in operator_trainlines:
+                user_followed_trainline.append((operator, trainline))
+        if (page == 0) and (len(user_followed_trainline) <= 18):
+            return self.UNFOLLOW_DELAY_show_all_following_trainline_onepage(user_followed_trainline, 0)
+        elif (page == 0) and (len(user_followed_trainline) > 18):
+            return self.UNFOLLOW_DELAY_show_all_following_trainline_first_page(user_followed_trainline, 0)
+        elif (page != 0) and ( (len(user_followed_trainline)-1)%16==0 ):
+            return self.UNFOLLOW_DELAY_show_all_following_trainline_last_page(user_followed_trainline, page-1)
+        elif (page != 0) and ((page+1)*16+1 <= len(user_followed_trainline)):
+            return self.UNFOLLOW_DELAY_show_all_following_trainline_middle_page(user_followed_trainline, page)
+        else:
+            return self.UNFOLLOW_DELAY_show_all_following_trainline_last_page(user_followed_trainline, page)
+
+    def UNFOLLOW_DELAY_show_all_following_trainline_onepage(self, user_followed_trainline, page=0):
+        """If the number of trainline not exceed max num of quickrep -> use this function
+        
+        @user_followed_trainline in form list of tuple [(operator1, trainline1),...]"""
+        page = 0
         quickrep_options = []
         number = 1
-        for operator in user_followed_trainline:
-            for trainline in user_followed_trainline[operator]:
-                quickrep_option = {
-                'label': f"❌ {number}. {trainline} ({operator})",
-                'description': f'Click to unfollow the trainline',
-                'metadata': f'unfollow_delay#unfollow_specific_trainline#{operator}#{trainline}'
-                }
-                quickrep_options.append(quickrep_option)
-                number += 1
+        for data in user_followed_trainline:
+            operator = data[0]
+            trainline = data[1]
+            quickrep_option = {
+            'label': f"❌ {number}. {trainline} ({operator})",
+            'description': f'Click to unfollow the trainline',
+            'metadata': f'unfollow_delay#unfollow_specific_trainline#{operator}#{trainline}#page#0'
+            }
+            # the page in above metadata show the page of this option if the number of option too large, need to split to multiple page
+            quickrep_options.append(quickrep_option)
+            number += 1
         quickrep_options.extend(self.default_options())
         return quickrep_options
 
+    def UNFOLLOW_DELAY_show_all_following_trainline_first_page(self, user_followed_trainline, page=0):
+        """The number of following trainline a lot -> span multiple quickrep page, this page has continue button"""
+        page = 0
+        quickrep_options = []
+        # max quickrep = 20, 2 default, 1 next button -> 
+        for number, data in enumerate(user_followed_trainline[:17], start=1):
+            operator = data[0]
+            trainline = data[1]
+            quickrep_option = {
+            'label': f"❌ {number}. {trainline} ({operator})",
+            'description': f'Click to unfollow the trainline',
+            'metadata': f'unfollow_delay#unfollow_specific_trainline#{operator}#{trainline}#page#0'
+            }
+            # the page in above metadata show the page of this option if the number of option too large, need to split to multiple page
+            quickrep_options.append(quickrep_option)
+
+        continue_option = {
+            'label': '➡ Continue',
+            'description': 'Next trainlines',
+            'metadata': f'continue#unfollow_delay#show_all_following_trainlines#page#1'
+        }   
+        quickrep_options.append(continue_option)
+        quickrep_options.extend(self.default_options())
+        return quickrep_options
+
+    def UNFOLLOW_DELAY_show_all_following_trainline_middle_page(self, user_followed_trainline, page:int):
+        """The middle page of following trainline, will have 'Back' and 'Continue' options"""
+        quickrep_options = []
+        # max quickrep = 20, 2 default, 1 next button
+        start_index = page*16 + 1
+        for number, data in enumerate(user_followed_trainline[start_index:start_index+16], start=start_index+1):
+            operator = data[0]
+            trainline = data[1]
+            quickrep_option = {
+            'label': f"❌ {number}. {trainline} ({operator})",
+            'description': f'Click to unfollow the trainline',
+            'metadata': f'unfollow_delay#unfollow_specific_trainline#{operator}#{trainline}#page#{page}'
+            }
+            # the page in above metadata show the page of this option if the number of option too large, need to split to multiple page
+            quickrep_options.append(quickrep_option)
+
+        continue_option = {
+            'label': '➡ Continue',
+            'description': 'Next trainlines',
+            'metadata': f'continue#unfollow_delay#show_all_following_trainlines#page#{page+1}'
+        }   
+        return_option = {
+            'label': '⬅ Back',
+            'description': 'Return to previous page',
+            'metadata': f'return_to#unfollow_delay#show_all_following_trainline#page#{page-1}'
+        }
+        quickrep_options.extend([continue_option, return_option])
+        quickrep_options.extend(self.default_options())
+        return quickrep_options
+
+    def UNFOLLOW_DELAY_show_all_following_trainline_last_page(self, user_followed_trainline, page:int):
+        """The last page of following trainline, will have back button"""
+        quickrep_options = []
+        # max quickrep = 20, 2 default, 1 next button
+        start_index = page*16 + 1
+        for number, data in enumerate(user_followed_trainline[start_index:], start=start_index+1):
+            operator = data[0]
+            trainline = data[1]
+            quickrep_option = {
+            'label': f"❌ {number}. {trainline} ({operator})",
+            'description': f'Click to unfollow the trainline',
+            'metadata': f'unfollow_delay#unfollow_specific_trainline#{operator}#{trainline}#page#{page}'
+            }
+            # the page in above metadata show the page of this option if the number of option too large, need to split to multiple page
+            quickrep_options.append(quickrep_option)
+  
+        return_option = {
+            'label': '⬅ Back',
+            'description': 'Return to previous page',
+            'metadata': f'return_to#unfollow_delay#show_all_following_trainline#page#{page-1}'
+        }
+        quickrep_options.extend([return_option])
+        quickrep_options.extend(self.default_options())
+        return quickrep_options
+
+
+    ########################################
+    # Home option
+    ########################################
     def home_options(self):
         quickrep_options = [
             {

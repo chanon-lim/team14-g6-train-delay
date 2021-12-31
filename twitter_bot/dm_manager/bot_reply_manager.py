@@ -164,23 +164,23 @@ class BotReplyManager:
     # Unfollow trainline
     ############################
 
-    def UNFOLLOW_DELAY_unfollow_specific_trainline(self, user_twitter_id, operator_name, trainline_name):
+    def UNFOLLOW_DELAY_unfollow_specific_trainline(self, user_twitter_id, operator_name, trainline_name, page):
         """Unfollow a specific trainline"""
         self.train_follower_manager.unfollow_a_following_trainline(user_twitter_id, operator_name, trainline_name)
         
         response = f"The trainline {trainline_name} is unfollowed!"
         user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(user_twitter_id)
-        quickrep_options = self.quickreply_manager.UNFOLLOW_DELAY_show_all_following_trainline(user_followed_trainline)
+        quickrep_options = self.quickreply_manager.UNFOLLOW_DELAY_show_all_following_trainline(user_followed_trainline, page)
         self.api_manager.send_direct_message(user_twitter_id, response, quick_reply_options=quickrep_options)
 
-    def UNFOLLOW_DELAY_display_all_following_trainline(self, user_twitter_id):
+    def UNFOLLOW_DELAY_display_all_following_trainline(self, user_twitter_id, page):
         user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(user_twitter_id)
         if len(user_followed_trainline) == 0:
             response = "You currently do not follow any trainline!"
             quickrep_options = self.quickreply_manager.home_options()
         else:
             response = "Select a trainline to unfollow"
-            quickrep_options = self.quickreply_manager.UNFOLLOW_DELAY_show_all_following_trainline(user_followed_trainline)
+            quickrep_options = self.quickreply_manager.UNFOLLOW_DELAY_show_all_following_trainline(user_followed_trainline, page)
         self.api_manager.send_direct_message(user_twitter_id, response, quick_reply_options=quickrep_options)
 
     def current_operation_state(self, train_line_information):
