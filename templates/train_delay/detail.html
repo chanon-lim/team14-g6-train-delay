@@ -23,13 +23,12 @@
             <div class="accordion" id="accordionPanelsStayOpenExample">
                 <div class="accordion-item">
                     <div class="accordion-header" id="panelsStayOpen">
-                        <a class="accordion-button" data-bs-toggle="collapse"
-                            href="#collapseOperator" aria-expanded="true"
-                            aria-controls="collapseOperator">
+                        <a class="accordion-button" data-bs-toggle="collapse" href="#collapseOperator"
+                            aria-expanded="true" aria-controls="collapseOperator">
                             {% translate 'Train Status' %}
                         </a>
                     </div>
-                    <div id="collapseOperator" class="accordion-collapse collapse show" 
+                    <div id="collapseOperator" class="accordion-collapse collapse show"
                         aria-labelledby="panelsStayOpen">
                         <div class="accordion-body">
                             <ul>
@@ -48,7 +47,7 @@
                 <table class="card-header" id="detail-header">
                     <tr>
                         <td><img src="{% static 'img/logo/'|add:information.operator_en|add:' '|add:information.railway_en|add:'.png' %}"
-                            alt="{{ information.railway_en }}" class="railway-icon"></td>
+                                alt="{{ information.railway_en }}" class="railway-icon"></td>
                         <td class="header-text">
                             {% get_current_language as LANGUAGE_CODE %}
                             {% if LANGUAGE_CODE == 'ja' %}
@@ -63,20 +62,26 @@
                 </table>
                 <div class="card-body">
                     {% if information.information_ja == "平常運転" %}
-                        <p><img src="{% static 'img/circle.png' %}" alt="normal" class="delay-icon"></p>
-                        <h3 class="card-text train-status">{% translate 'Service on Schedule' %}</h3>
+                    <p><img src="{% static 'img/circle.png' %}" alt="normal" class="delay-icon"></p>
+                    <h3 class="card-text train-status">{% translate 'Service on Schedule' %}</h3>
                     {% else %}
-                        <p><img src="{% static 'img/exclamation.png' %}" alt="delay" class="delay-icon"></p>
-                        <h3 class="card-title train-status">{% translate 'Delay' %}</h3>
-                        {% if LANGUAGE_CODE == 'ja' %}
-                        <p class="card-text train-status-info">{{ information.information_ja }}</p>
-                        {% elif LANGUAGE_CODE == 'en' %}
-                        <p class="card-text train-status-info">{{ information.information_en }}</p>
-                        {% endif %}
+                    <p><img src="{% static 'img/exclamation.png' %}" alt="delay" class="delay-icon"></p>
+                    <h3 class="card-title train-status">{% translate 'Delay' %}</h3>
+                    {% if LANGUAGE_CODE == 'ja' %}
+                    <p class="card-text train-status-info">{{ information.information_ja }}</p>
+                    {% elif LANGUAGE_CODE == 'en' %}
+                    <p class="card-text train-status-info">{{ information.information_en }}</p>
                     {% endif %}
-                    
+                    {% endif %}
+
                     <div class="news">
-                        <h4>{% translate 'Latest News' %}</h4><hr>
+                        <h4>
+                            {% translate 'Latest News' %}
+                            {% if LANGUAGE_CODE == 'en' %}
+                            <span> (in Japanese)</span>
+                            {% elif LANGUAGE_CODE == 'ja' %}{% endif %}
+                        </h4>
+                        <hr>
                         {% for new in news_list%}
                         <a href="{{new.link}}">
                             <div class="card">

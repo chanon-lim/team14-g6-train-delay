@@ -212,6 +212,10 @@ a:hover, a:focus {
     text-align: left;
 }
 
+.news span {
+    font-size: 0.8rem;
+}
+
 .news .card-body .card-title {
     font-size: 1.1rem;
     font-weight: 600;
