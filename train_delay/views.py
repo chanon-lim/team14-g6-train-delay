@@ -22,14 +22,27 @@ def index(request):
 
 def detail(request, operator_en, railway_en):
     this_railway = TrainInfo.objects.get(operator_en=operator_en, railway_en=railway_en)
-    response = requests.get(f"https://news.yahoo.co.jp/search?p={this_railway.railway_ja}&ei=utf-8")
-    soup = BeautifulSoup(response.text, features="html.parser")
+    search_keyword = this_railway.railway_ja
 
-    titles = [tag.getText() for tag in soup.find_all(name="div", class_="newsFeed_item_title")[:3]]
-    links = [tag.get("href") for tag in soup.find_all(name="a", class_="newsFeed_item_link")[:3]] 
-    texts = [tag.getText() for tag in soup.find_all(name="div", class_="sc-iQoMDr ibBIoj")[:3]]
-    subtitles = [tag.getText() for tag in soup.find_all(name="div", class_="newsFeed_item_sourceWrap")[:3]]
+    while True:
+        response = requests.get(f"https://news.yahoo.co.jp/search?p={search_keyword}&ei=utf-8")
+        soup = BeautifulSoup(response.text, features="html.parser")
 
+        titles = [tag.getText() for tag in soup.find_all(name="div", class_="newsFeed_item_title")[:3]]
+        
+        if len(titles) == 0:
+            if "線" in search_keyword:
+                search_keyword = search_keyword.split("線")[0] + "線"
+            elif "ライン" in search_keyword:
+                search_keyword = search_keyword.split("ライン")[0] + "ライン"
+            continue
+
+        links = [tag.get("href") for tag in soup.find_all(name="a", class_="newsFeed_item_link")[:3]] 
+        texts = [tag.getText() for tag in soup.find_all(name="div", class_="sc-iQoMDr ibBIoj")[:3]]
+        subtitles = [tag.getText() for tag in soup.find_all(name="div", class_="newsFeed_item_sourceWrap")[:3]]
+        break
+
+        
     context = {
         'information': this_railway,
         'news_list': [{'title': title, 'link': link, 'text': text, 'subtitle': subtitle} for title, link, text, subtitle in zip(titles, links, texts, subtitles)]
