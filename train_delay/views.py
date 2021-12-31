@@ -12,10 +12,8 @@ def index(request):
         'information': train_info,
         'operator_list': sorted(list(set([info.operator_ja for info in train_info])))
     }
-    
     return render(request, 'train_delay/index.html', context)
-
-
+    
 def detail(request, operator_en, railway_en):
     # check_last_update()
     

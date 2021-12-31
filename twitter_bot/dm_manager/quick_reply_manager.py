@@ -25,7 +25,7 @@ class QuickrepOptionManager:
         quickrep_options = []
         for number, operator in enumerate(ALL_TRAIN_OPERATORS, start=1):
             quickrep_option = {
-                'label': f'🔎 {number}. {operator}',
+                'label': f'🔎 {number}. {operator} 🚉',
                 'description': f'Click to check trainline of {operator}',
                 'metadata': f'check_delay#{operator}'
             }
@@ -41,7 +41,7 @@ class QuickrepOptionManager:
         # if operator has <= 17 trainlines
         for number, trainline in enumerate(all_train_lines_in_operator, start=1):
             quickrep_option = {
-                'label': f'🔎 {number}. {trainline}',
+                'label': f'🔎 {number}. {trainline} 🚋',
                 'description': f'Click to check the delay status of {trainline} trainline',
                 'metadata': f'check_delay#get_status#{operator_name}#{trainline}#0'
                 # the last number 0 is the page number, because one page -> 0
@@ -65,7 +65,7 @@ class QuickrepOptionManager:
         all_train_lines_in_operator = ALL_TRAIN_LINES[operator_name][:16]
         for number, trainline in enumerate(all_train_lines_in_operator, start=1):
             quickrep_option = {
-                'label': f'🔎 {number}. {trainline}',
+                'label': f'🔎 {number}. {trainline} 🚋',
                 'description': f'Click to check the delay status of {trainline} trainline',
                 'metadata': f'check_delay#get_status#{operator_name}#{trainline}#0'
             }
@@ -93,7 +93,7 @@ class QuickrepOptionManager:
         all_train_lines_in_operator = ALL_TRAIN_LINES[operator_name][start_index:start_index+16]
         for number, trainline in enumerate(all_train_lines_in_operator, start=start_index+1):
             quickrep_option = {
-                'label': f'🔎 {number}. {trainline}',
+                'label': f'🔎 {number}. {trainline} 🚋',
                 'description': f'Click to check the delay status of {trainline} trainline',
                 'metadata': f'check_delay#get_status#{operator_name}#{trainline}#{page}'
             }
@@ -121,7 +121,7 @@ class QuickrepOptionManager:
         all_train_lines_in_operator = ALL_TRAIN_LINES[operator_name][start_index:]
         for number, trainline in enumerate(all_train_lines_in_operator, start=start_index+1):
             quickrep_option = {
-                'label': f'🔎 {number}. {trainline}',
+                'label': f'🔎 {number}. {trainline} 🚋',
                 'description': f'Click to check the delay status of {trainline} trainline',
                 'metadata': f'check_delay#get_status#{operator_name}#{trainline}#{page}'
             }
@@ -199,9 +199,9 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=1):
             # check if a trainline is followed or not, change label depend on that
             if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
-                quickrep_label = f'🔔👌 {number}. {trainline} [Followed]'
+                quickrep_label = f'🔔👌 {number}. {trainline} 🚋 [フォロー中]'
             else:
-                quickrep_label = f'🔔 {number}. {trainline}'
+                quickrep_label = f'🔔 {number}. {trainline} 🚋'
 
             quickrep_option = {
                 'label': quickrep_label,
@@ -229,9 +229,9 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=1):
             # check if a trainline is followed or not, change label depend on that
             if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
-                quickrep_label = f'🔔👌 {number}. {trainline} [Followed]'
+                quickrep_label = f'🔔👌 {number}. {trainline} 🚋 [フォロー中]'
             else:
-                quickrep_label = f'🔔 {number}. {trainline}'
+                quickrep_label = f'🔔 {number}. {trainline} 🚋'
 
             quickrep_option = {
                 'label': quickrep_label,
@@ -263,9 +263,9 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=start_index+1):
             # check if a trainline is followed or not, change label depend on that
             if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
-                quickrep_label = f'🔔👌 {number}. {trainline} [Followed]'
+                quickrep_label = f'🔔👌 {number}. {trainline} 🚋 [フォロー中]'
             else:
-                quickrep_label = f'🔔 {number}. {trainline}'
+                quickrep_label = f'🔔 {number}. {trainline} 🚋'
 
             quickrep_option = {
                 'label': quickrep_label,
@@ -297,9 +297,9 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=start_index+1):
             # check if a trainline is followed or not, change label depend on that
             if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
-                quickrep_label = f'🔔👌 {number}. {trainline} [Followed]'
+                quickrep_label = f'🔔👌 {number}. {trainline} 🚋 [フォロー中]'
             else:
-                quickrep_label = f'🔔 {number}. {trainline}'
+                quickrep_label = f'🔔 {number}. {trainline} 🚋'
         
             quickrep_option = {
                 'label': quickrep_label,
@@ -343,7 +343,7 @@ class QuickrepOptionManager:
     def home_options(self):
         quickrep_options = [
             {
-                'label': '🌐 Visit website',
+                'label': '🌐 Webサイトに来てね。',
                 'description': 'Visit train delay website for more details...',
                 'metadata': 'visit_website'
             },
