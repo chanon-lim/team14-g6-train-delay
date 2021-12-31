@@ -6,7 +6,7 @@ print("Heroku worker run first time")
 while True:
     sleep(5)
     try:
-        url = "http://localhost:8001/trainbot/home"
+        url = "http://0.0.0.0:8001/trainbot/home"
         r = requests.get(url)
         print(r)
         print(r.status_code)
