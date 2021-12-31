@@ -1,5 +1,7 @@
 {% load static %}
 {% load i18n %}
+<!-- i18n_url is a custom template tags for change language, directory is inside train_delay app -->
+{% load i18n_urls %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,6 +42,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <a class="accordion-button collapsed" data-bs-toggle="collapse"
+                            href="#collapseLanguages" aria-expanded="true"
+                            aria-controls="collapseLanguages">
+                            {% translate 'Languages' %}
+                        </a>
+                    </div>
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    <div id="collapseLanguages" class="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen">
+                        <div class="accordion-body">
+                            <ul>
+                            {% for lang in languages %}
+                                <li>
+                                    <a class="operator-nav" href="{% change_lang ''|add:lang.code %}">
+                                        {{ lang.name_local }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </nav>
 
@@ -53,7 +81,6 @@
                     <div class="card train-info {% if info.information_ja != '平常運転' %}delay{% else %}normal{% endif %}">
                         <a href="{% url 'train_delay:detail' info.operator_en info.railway_en %}">
                             <div class="card-body">
-                                {% get_current_language as LANGUAGE_CODE %}
                                 {% if LANGUAGE_CODE == 'ja' %}
                                 <div class="header">
                                     <img src="{% static 'img/logo/'|add:info.operator_en|add:' '|add:info.railway_en|add:'.png' %}"

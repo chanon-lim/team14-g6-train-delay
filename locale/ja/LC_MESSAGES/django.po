@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-31 23:15+0700\n"
+"POT-Creation-Date: 2021-12-31 23:35+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,18 +30,22 @@ msgstr "英語"
 msgid "admin/"
 msgstr ""
 
-#: .\templates\train_delay\detail.html:29 .\templates\train_delay\index.html:29
+#: .\templates\train_delay\detail.html:28 .\templates\train_delay\index.html:29
 msgid "Train Status"
 msgstr "運行情報"
 
-#: .\templates\train_delay\detail.html:67
+#: .\templates\train_delay\detail.html:47 .\templates\train_delay\index.html:48
+msgid "Languages"
+msgstr "言語"
+
+#: .\templates\train_delay\detail.html:92
 msgid "Service on Schedule"
 msgstr "平常運転"
 
-#: .\templates\train_delay\detail.html:70
+#: .\templates\train_delay\detail.html:95
 msgid "Delay"
 msgstr "遅延"
 
-#: .\templates\train_delay\detail.html:79
+#: .\templates\train_delay\detail.html:105
 msgid "Latest News"
 msgstr "最新ニュース"
