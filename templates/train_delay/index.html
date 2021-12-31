@@ -1,4 +1,7 @@
 {% load static %}
+{% load i18n %}
+<!-- i18n_url is a custom template tags for change language, directory is inside train_delay app -->
+{% load i18n_urls %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +28,7 @@
                         <a class="accordion-button" data-bs-toggle="collapse"
                             href="#collapseOperator" aria-expanded="true"
                             aria-controls="collapseOperator">
-                            運行情報
+                            {% translate 'Train Status' %}
                         </a>
                     </div>
                     <div id="collapseOperator" class="accordion-collapse collapse show"
@@ -39,6 +42,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <a class="accordion-button collapsed" data-bs-toggle="collapse"
+                            href="#collapseLanguages" aria-expanded="true"
+                            aria-controls="collapseLanguages">
+                            {% translate 'Languages' %}
+                        </a>
+                    </div>
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    <div id="collapseLanguages" class="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen">
+                        <div class="accordion-body">
+                            <ul>
+                            {% for lang in languages %}
+                                <li>
+                                    <a class="operator-nav" href="{% change_lang ''|add:lang.code %}">
+                                        {{ lang.name_local }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </nav>
 
@@ -47,18 +76,28 @@
             <h2 class="operator">{{ operator }}</h2>
             <div class="row">
                 {% for info in information %}
-                {% if info.operator_ja == operator %}
+                {% if info.operator_ja == operator or info.operator_en == operator %}
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="card train-info {% if info.information_ja != '平常運転' %}delay{% else %}normal{% endif %}">
                         <a href="{% url 'train_delay:detail' info.operator_en info.railway_en %}">
                             <div class="card-body">
+                                {% if LANGUAGE_CODE == 'ja' %}
                                 <div class="header">
                                     <img src="{% static 'img/logo/'|add:info.operator_en|add:' '|add:info.railway_en|add:'.png' %}"
-                                        alt="{{ info.railway_en }}" class="railway-icon">
+                                        alt="{{ info.railway_ja }}" class="railway-icon">
                                     <h5 class="card-title">{{ info.railway_ja }}</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">{{ info.operator_ja }}</h6>
                                 </div>
                                 <p class="card-text">{{ info.information_ja }}</p>
+                                {% elif LANGUAGE_CODE == 'en' %}
+                                <div class="header">
+                                    <img src="{% static 'img/logo/'|add:info.operator_en|add:' '|add:info.railway_en|add:'.png' %}"
+                                        alt="{{ info.railway_en }}" class="railway-icon">
+                                    <h5 class="card-title">{{ info.railway_en }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ info.operator_en }}</h6>
+                                </div>
+                                <p class="card-text">{{ info.information_en }}</p>
+                                {% endif %}
                             </div>
                         </a>
                     </div>

@@ -203,8 +203,17 @@ a:hover, a:focus {
     font-weight: 600;
 }
 
+.detail .train-status-info {
+    margin-bottom: 2rem;
+    padding: 20px;
+}
+
 .news {
     text-align: left;
+}
+
+.news span {
+    font-size: 0.8rem;
 }
 
 .news .card-body .card-title {
