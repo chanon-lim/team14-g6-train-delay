@@ -9,7 +9,7 @@ print(f"========\n\nPORT: {HEROKU_PORT}\n=============")
 while True:
     sleep(5)
     try:
-        url = "http://0.0.0.0:8001/trainbot/home"
+        url = "http://g6-twitter-bot.herokuapp.com/trainbot/home"
         r = requests.get(url)
         print(r)
         print(r.status_code)
