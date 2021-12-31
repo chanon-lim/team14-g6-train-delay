@@ -1,6 +1,8 @@
 import requests
 from time import sleep
 
+print("Heroku worker run first time")
+
 while True:
     sleep(5)
     try:
