@@ -1,7 +1,10 @@
 import requests
 from time import sleep
+import os
 
 print("Heroku worker run first time")
+HEROKU_PORT = os.environ.get('PORT')
+print(f"========\n\nPORT: {HEROKU_PORT}\n=============")
 
 while True:
     sleep(5)
