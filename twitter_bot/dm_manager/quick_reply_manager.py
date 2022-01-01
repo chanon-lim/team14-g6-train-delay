@@ -8,7 +8,7 @@ class QuickrepOptionManager:
         """Return list of default options like 'Home', 'Help' button"""
         default_option = [
                 {
-                    "label": "🏠 Home",
+                    "label": "🏠 ホーム",
                     "description": "Return to top",
                     "metadata": "home"
                 },
@@ -50,7 +50,7 @@ class QuickrepOptionManager:
 
         # add return button
         return_option = {
-            'label': '⬅ Back',
+            'label': '⬅️ 前',
             'description': 'Return to previous page',
             'metadata': 'return_to#check_delay_info'
         }
@@ -72,13 +72,13 @@ class QuickrepOptionManager:
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅ Back',
+            'label': '⬅️ 前',
             'description': 'Return to previous page',
             'metadata': 'return_to#check_delay_info'
         }
         # add continue button
         continue_option = {
-            'label': '➡ Continue',
+            'label': '➡️ 次',
             'description': 'Next trainlines',
             'metadata': f'continue#check_delay#{operator_name}#1'
         }
@@ -100,13 +100,13 @@ class QuickrepOptionManager:
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅ Back',
+            'label': '⬅️ 前',
             'description': 'Return to previous page',
             'metadata': f'return_to#check_delay#{operator_name}#{page-1}'
         }
         # add continue button
         continue_option = {
-            'label': '➡ Continue',
+            'label': '➡️ 次',
             'description': 'Next trainlines',
             'metadata': f'continue#check_delay#{operator_name}#{page+1}'
         }
@@ -128,7 +128,7 @@ class QuickrepOptionManager:
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅ Back',
+            'label': '⬅️ 前',
             'description': 'Return to previous page',
             'metadata': f'return_to#check_delay#{operator_name}#{page-1}'
         }
@@ -199,7 +199,7 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=1):
             # check if a trainline is followed or not, change label depend on that
             if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
-                quickrep_label = f'🔔👌 {number}. {trainline} [フォロー中]'
+                quickrep_label = f'🔔✅ {number}. {trainline} [フォロー中]'
             else:
                 quickrep_label = f'🔔🚋 {number}. {trainline}'
 
@@ -213,7 +213,7 @@ class QuickrepOptionManager:
 
         # add return button
         return_option = {
-            'label': '⬅ Back',
+            'label': '⬅️ 前',
             'description': 'Return to previous page',
             'metadata': 'return_to#follow_delay#show_all_operator'
         }
@@ -229,7 +229,7 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=1):
             # check if a trainline is followed or not, change label depend on that
             if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
-                quickrep_label = f'🔔👌 {number}. {trainline} [フォロー中]'
+                quickrep_label = f'🔔✅ {number}. {trainline} [フォロー中]'
             else:
                 quickrep_label = f'🔔🚋 {number}. {trainline}'
 
@@ -241,13 +241,13 @@ class QuickrepOptionManager:
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅ Back',
+            'label': '⬅️ 前',
             'description': 'Return to previous page',
             'metadata': 'return_to#follow_delay#show_all_operator'
         }
         # add continue button
         continue_option = {
-            'label': '➡ Continue',
+            'label': '➡️ 次',
             'description': 'Next trainlines',
             'metadata': f'continue#follow_delay#show_all_trainline_in#{operator_name}#1'
         }
@@ -263,7 +263,7 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=start_index+1):
             # check if a trainline is followed or not, change label depend on that
             if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
-                quickrep_label = f'🔔👌 {number}. {trainline} [フォロー中]'
+                quickrep_label = f'🔔✅ {number}. {trainline} [フォロー中]'
             else:
                 quickrep_label = f'🔔🚋 {number}. {trainline}'
 
@@ -275,13 +275,13 @@ class QuickrepOptionManager:
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅ Back',
+            'label': '⬅️ 前',
             'description': 'Return to previous page',
             'metadata': f'return_to#follow_delay#show_all_trainline_in#{operator_name}#{page-1}'
         }
         # add continue button
         continue_option = {
-            'label': '➡ Continue',
+            'label': '➡️ 次',
             'description': 'Next trainlines',
             'metadata': f'continue#follow_delay#show_all_trainline_in#{operator_name}#{page+1}'
         }
@@ -297,7 +297,7 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=start_index+1):
             # check if a trainline is followed or not, change label depend on that
             if operator_name in user_followed_trainline and trainline in user_followed_trainline[operator_name]:
-                quickrep_label = f'🔔👌 {number}. {trainline} [フォロー中]'
+                quickrep_label = f'🔔✅ {number}. {trainline} [フォロー中]'
             else:
                 quickrep_label = f'🔔🚋 {number}. {trainline}'
         
@@ -309,7 +309,7 @@ class QuickrepOptionManager:
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅ Back',
+            'label': '⬅️ 前',
             'description': 'Return to previous page',
             'metadata': f'return_to#follow_delay#show_all_trainline_in#{operator_name}#{page-1}'
         }
@@ -337,7 +337,7 @@ class QuickrepOptionManager:
         elif (page == 0) and (len(user_followed_trainline) > 18):
             return self.UNFOLLOW_DELAY_show_all_following_trainline_first_page(user_followed_trainline, 0)
         elif (page != 0) and ( (len(user_followed_trainline)-1)%16==0 ):
-            return self.UNFOLLOW_DELAY_show_all_following_trainline_last_page(user_followed_trainline, page-1)
+            return self.UNFOLLOW_DELAY_show_all_following_trainline_last_page(user_followed_trainline, page)
         elif (page != 0) and ((page+1)*16+1 <= len(user_followed_trainline)):
             return self.UNFOLLOW_DELAY_show_all_following_trainline_middle_page(user_followed_trainline, page)
         else:
@@ -381,7 +381,7 @@ class QuickrepOptionManager:
             quickrep_options.append(quickrep_option)
 
         continue_option = {
-            'label': '➡ Continue',
+            'label': '➡️ 次',
             'description': 'Next trainlines',
             'metadata': f'continue#unfollow_delay#show_all_following_trainlines#page#1'
         }   
@@ -406,12 +406,12 @@ class QuickrepOptionManager:
             quickrep_options.append(quickrep_option)
 
         continue_option = {
-            'label': '➡ Continue',
+            'label': '➡️ 次',
             'description': 'Next trainlines',
             'metadata': f'continue#unfollow_delay#show_all_following_trainlines#page#{page+1}'
         }   
         return_option = {
-            'label': '⬅ Back',
+            'label': '⬅️ 前',
             'description': 'Return to previous page',
             'metadata': f'return_to#unfollow_delay#show_all_following_trainline#page#{page-1}'
         }
@@ -436,7 +436,7 @@ class QuickrepOptionManager:
             quickrep_options.append(quickrep_option)
   
         return_option = {
-            'label': '⬅ Back',
+            'label': '⬅️ 前',
             'description': 'Return to previous page',
             'metadata': f'return_to#unfollow_delay#show_all_following_trainline#page#{page-1}'
         }
