@@ -15,28 +15,28 @@ params = {
 
 updated_data = {
     "message_data": {
-            "text": "Welcome, this is the train bot",
+            "text": "こんにちは！東京電車遅延情報のTwitterBotです。🚊🤖\nBotの機能を使用するために、QuickReplyオプションを使用してください。👇👇",
             "quick_reply": {
                 "type": "options",
                 "options": [
                     {
-                        'label': '🌐 Visit website',
-                        'description': 'Visit train delay website for more details...',
+                        'label': '🌐 Webサイトに来る',
+                        'description': 'もっと情報、ニュース...',
                         'metadata': 'visit_website'
                     },
                     {
-                        'label': '🔎 Check train delay status',
-                        'description': 'Get current delay info of 86 train lines in Tokyo',
+                        'label': '🔎 路線の運行情報を見る',
+                        'description': '東京で現在の86路線の運行情報',
                         'metadata': 'check_delay_info'
                     },
                     {
-                        'label': '🔔 Follow train line status',
-                        'description': 'Get notified when delay in a train line occur',
-                        'metadata': 'follow_delay#show_all_operator'
+                        'label': '🔔 路線の運行情報をフォローする',
+                        'description': 'フォローされた路線の遅延の時、DMを受信する',
+                        'metadata': f'follow_delay#show_all_operator'
                     },
                     {
-                        'label': '❌ Unfollow trainline',
-                        'description': 'Unfollow to stop receiving DM when delay occur',
+                        'label': '❌ 路線の運行情報をフォロー解除する',
+                        'description': '路線の遅延通知の受信を停止する',
                         'metadata': 'unfollow_delay#show_all_following_trainline'
                     }
                 ]

@@ -1,0 +1,32 @@
+Please choose 1 operator to see all trainlines belong to
+全ての鉄道を見るには、会社を選んでください。
+
+Choose a trainline to check its delay status
+遅延情報を調べるには、鉄道を選んでください。
+
+There is a problem with the service. Please try again later 
+サービスは問題があります。後でもう一度やってみってください。
+
+Sorry, we currently do not support user command yet. Please use quick reply instead
+すみません、今、ユーザーコマンドをサポートしません。QuickReplyオプションを使ってください。
+
+Choose a trainline to follow its delay status
+遅延情報を見るには、鉄道を選んでください。
+
+You already followed this trainline!
+この鉄道がファローされています！
+
+You followed this trainline!
+✅　この鉄道はフォローされました！
+
+The trainline {trainline_name} is unfollowed!
+✅　{trainline_name}はフォローを解除しました。
+
+You currently do not follow any trainline!
+今、フォローされた鉄道がありません。
+
+Click to check trainline of {operator}
+{operator}の鉄道を見るには、選んでください。
+
+Click to check the delay status of {trainline}
+{trainline}の遅延情報を見るには、選んでください。

@@ -54,19 +54,19 @@ class BotReplyManager:
     def visit_website(self, recipient_id):
         """Send message and link to Mike's website"""
         quickrep_options = self.quickreply_manager.home_options()
-        response = "Please visit website at: https://train-delay-chien.herokuapp.com/"
+        response = "https://train-delay-chien.herokuapp.com/"+"でWebサイトを見ってください。"
         self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
 
     def CHECK_DELAY_show_all_operators_list(self, recipient_id):
         """Show list of all operators to CHECK delay"""
         quickrep_options = self.quickreply_manager.CHECK_DELAY_all_operator_options()
-        response = "Please choose 1 operator to see all trainlines belong to"
+        response = "路線を見るために、事業者を選択してください。"
         self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
 
     def CHECK_DELAY_show_all_trainline_of_specific_operator(self, recipient_id, operator_name, page=0):
         """Show list of all trainline in a specific operator name, eg all trainline of JREast"""
         quickrep_options = self.quickreply_manager.CHECK_DELAY_all_trainline_of_specific_operator_options(operator_name, page)
-        response = "Choose a trainline to check its delay status"
+        response = "運行情報を見るために、路線を選択してください。"
         self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
 
     # Note: access train database often has error -> should add try-catch to handle
@@ -82,31 +82,31 @@ class BotReplyManager:
                 response = f"🟠 {trainline_status_object.railway_ja}: {trainline_status_object.information_ja}"
             self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
         except Exception:
-            response = f"There is a problem with the service. Please try again later 🙇‍♂️"
+            response = f"問題が発生しました。やりなおしてください。 🙇‍♂️"
             self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
 
     def home(self, recipient_id):
         quickrep_options = self.quickreply_manager.home_options()
-        response = "Welcome back..."
+        response = "お帰りなさい！"
         self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
 
     def user_cmd_apologize(self, recipient_id):
         """Sorry user for not supporting user cmd yet"""
         quickrep_options = self.quickreply_manager.home_options()
-        response = "Sorry, we currently do not support user command yet. Please use quick reply instead 🙇‍♂️"
+        response = "現在、ユーザーコマンドをサポートしていません。QuickReplyオプションを使用してください。 🙇‍♂️"
         self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
 
     def FOLLOW_DELAY_show_all_operators_list(self, recipient_id):
         """Show list of all operators to FOLLOW delay"""
         quickrep_options = self.quickreply_manager.FOLLOW_DELAY_all_operator_options()
-        response = "Please choose 1 operator to see all trainlines belong to"
+        response = "路線を見るために、事業者を選択してください。"
         self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
     
     def FOLLOW_DELAY_show_all_trainline_of_specific_operator(self, recipient_id, operator_name, page=0):
         """Show list of all trainline in a specific operator name, eg all trainline of JREast"""
         user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(recipient_id)
         quickrep_options = self.quickreply_manager.FOLLOW_DELAY_all_trainline_of_specific_operator_options(user_followed_trainline, operator_name, page)
-        response = "Choose a trainline to follow its delay status"
+        response = "運行状況をフォローするために、路線を選択してください。"
         self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
 
     def FOLLOW_DELAY_show_trainline_follow_status(self, recipient_id, operator_name, trainline_name, page):
@@ -116,10 +116,10 @@ class BotReplyManager:
         already_followed = self.train_follower_manager.get_follow_status_of(recipient_id, operator_name, trainline_name) == 'already'
 
         if already_followed:
-            response = "You already followed this trainline! Let's follow other trainline!"
+            response = "この路線がファローされています！"
         else:
             self.train_follower_manager.register_new_follow(recipient_id, operator_name, trainline_name)
-            response = "You followed this trainline!"
+            response = "✅　この路線の運行状況はフォローされました！"
 
         user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(recipient_id)
         quickrep_options = self.quickreply_manager.FOLLOW_DELAY_show_trainline_follow_status_options(user_followed_trainline, operator_name, trainline_name, page)
@@ -168,7 +168,7 @@ class BotReplyManager:
         """Unfollow a specific trainline"""
         self.train_follower_manager.unfollow_a_following_trainline(user_twitter_id, operator_name, trainline_name)
         
-        response = f"The trainline {trainline_name} is unfollowed!"
+        response = f"✅　{trainline_name}はフォロー解除されました。"
         user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(user_twitter_id)
         quickrep_options = self.quickreply_manager.UNFOLLOW_DELAY_show_all_following_trainline(user_followed_trainline, page)
         self.api_manager.send_direct_message(user_twitter_id, response, quick_reply_options=quickrep_options)
@@ -176,10 +176,10 @@ class BotReplyManager:
     def UNFOLLOW_DELAY_display_all_following_trainline(self, user_twitter_id, page):
         user_followed_trainline = self.train_follower_manager.get_all_trainline_follow_of_user(user_twitter_id)
         if len(user_followed_trainline) == 0:
-            response = "You currently do not follow any trainline!"
+            response = "現在、フォローされている路線がありません。"
             quickrep_options = self.quickreply_manager.home_options()
         else:
-            response = "Select a trainline to unfollow"
+            response = "フォローを解除するために、路線を選択してください。"
             quickrep_options = self.quickreply_manager.UNFOLLOW_DELAY_show_all_following_trainline(user_followed_trainline, page)
         self.api_manager.send_direct_message(user_twitter_id, response, quick_reply_options=quickrep_options)
 

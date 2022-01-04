@@ -9,7 +9,7 @@ class QuickrepOptionManager:
         default_option = [
                 {
                     "label": "🏠 ホーム",
-                    "description": "Return to top",
+                    "description": "ホームへ帰る",
                     "metadata": "home"
                 },
                 # {
@@ -26,7 +26,7 @@ class QuickrepOptionManager:
         for number, operator in enumerate(ALL_TRAIN_OPERATORS, start=1):
             quickrep_option = {
                 'label': f'🔎🚉 {number}. {operator}',
-                'description': f'Click to check trainline of {operator}',
+                'description': f'{operator}の路線を見る。',
                 'metadata': f'check_delay#{operator}'
             }
             quickrep_options.append(quickrep_option)
@@ -42,7 +42,7 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=1):
             quickrep_option = {
                 'label': f'🔎🚋 {number}. {trainline}',
-                'description': f'Click to check the delay status of {trainline} trainline',
+                'description': f'{trainline}の運行情報を見る。',
                 'metadata': f'check_delay#get_status#{operator_name}#{trainline}#0'
                 # the last number 0 is the page number, because one page -> 0
             }
@@ -50,8 +50,8 @@ class QuickrepOptionManager:
 
         # add return button
         return_option = {
-            'label': '⬅️ 前',
-            'description': 'Return to previous page',
+            'label': '⬅️ 前のページ',
+            'description': '前のページへ帰る',
             'metadata': 'return_to#check_delay_info'
         }
         quickrep_options.append(return_option)
@@ -66,20 +66,20 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=1):
             quickrep_option = {
                 'label': f'🔎🚋 {number}. {trainline}',
-                'description': f'Click to check the delay status of {trainline} trainline',
+                'description': f'{trainline}の運行情報を見る。',
                 'metadata': f'check_delay#get_status#{operator_name}#{trainline}#0'
             }
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅️ 前',
-            'description': 'Return to previous page',
+            'label': '⬅️ 前のページ',
+            'description': '前のページへ帰る',
             'metadata': 'return_to#check_delay_info'
         }
         # add continue button
         continue_option = {
-            'label': '➡️ 次',
-            'description': 'Next trainlines',
+            'label': '➡️ 次のページ',
+            'description': '次のページへ来る',
             'metadata': f'continue#check_delay#{operator_name}#1'
         }
         quickrep_options.extend([return_option, continue_option])
@@ -94,20 +94,20 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=start_index+1):
             quickrep_option = {
                 'label': f'🔎🚋 {number}. {trainline}',
-                'description': f'Click to check the delay status of {trainline} trainline',
+                'description': f'{trainline}の運行情報を見る。',
                 'metadata': f'check_delay#get_status#{operator_name}#{trainline}#{page}'
             }
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅️ 前',
-            'description': 'Return to previous page',
+            'label': '⬅️ 前のページ',
+            'description': '前のページへ帰る',
             'metadata': f'return_to#check_delay#{operator_name}#{page-1}'
         }
         # add continue button
         continue_option = {
-            'label': '➡️ 次',
-            'description': 'Next trainlines',
+            'label': '➡️ 次のページ',
+            'description': '次のページへ来る',
             'metadata': f'continue#check_delay#{operator_name}#{page+1}'
         }
         quickrep_options.extend([return_option, continue_option])
@@ -122,14 +122,14 @@ class QuickrepOptionManager:
         for number, trainline in enumerate(all_train_lines_in_operator, start=start_index+1):
             quickrep_option = {
                 'label': f'🔎🚋 {number}. {trainline}',
-                'description': f'Click to check the delay status of {trainline} trainline',
+                'description': f'{trainline}の運行情報を見る。',
                 'metadata': f'check_delay#get_status#{operator_name}#{trainline}#{page}'
             }
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅️ 前',
-            'description': 'Return to previous page',
+            'label': '⬅️ 前のページ',
+            'description': '前のページへ帰る',
             'metadata': f'return_to#check_delay#{operator_name}#{page-1}'
         }
         quickrep_options.extend([return_option])
@@ -167,7 +167,7 @@ class QuickrepOptionManager:
         for number, operator in enumerate(ALL_TRAIN_OPERATORS, start=1):
             quickrep_option = {
                 'label': f'🔔🚉 {number}. {operator}',
-                'description': f'Click to see trainline of {operator}',
+                'description': f'{operator}の路線を見る',
                 'metadata': f'follow_delay#show_all_trainline_in#{operator}'
             }
             quickrep_options.append(quickrep_option)
@@ -205,7 +205,7 @@ class QuickrepOptionManager:
 
             quickrep_option = {
                 'label': quickrep_label,
-                'description': f'Click to follow the delay status of {trainline} trainline',
+                'description': f'運行情報をフォローする。',
                 'metadata': f'follow_delay#follow_status_of#{operator_name}#{trainline}#0'
                 # the last number 0 is the page number, because one page -> 0
             }
@@ -213,8 +213,8 @@ class QuickrepOptionManager:
 
         # add return button
         return_option = {
-            'label': '⬅️ 前',
-            'description': 'Return to previous page',
+            'label': '⬅️ 前のページ',
+            'description': '前のページへ帰る',
             'metadata': 'return_to#follow_delay#show_all_operator'
         }
         quickrep_options.append(return_option)
@@ -235,20 +235,20 @@ class QuickrepOptionManager:
 
             quickrep_option = {
                 'label': quickrep_label,
-                'description': f'Click to follow the delay status of {trainline} trainline',
+                'description': f'運行情報をフォローする。',
                 'metadata': f'follow_delay#follow_status_of#{operator_name}#{trainline}#0'
             }
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅️ 前',
-            'description': 'Return to previous page',
+            'label': '⬅️ 前のページ',
+            'description': '前のページへ帰る',
             'metadata': 'return_to#follow_delay#show_all_operator'
         }
         # add continue button
         continue_option = {
-            'label': '➡️ 次',
-            'description': 'Next trainlines',
+            'label': '➡️ 次のページ',
+            'description': '次のページへ来る',
             'metadata': f'continue#follow_delay#show_all_trainline_in#{operator_name}#1'
         }
         quickrep_options.extend([return_option, continue_option])
@@ -269,20 +269,20 @@ class QuickrepOptionManager:
 
             quickrep_option = {
                 'label': quickrep_label,
-                'description': f'Click to follow the delay status of {trainline} trainline',
+                'description': f'運行情報をフォローする。',
                 'metadata': f'follow_delay#follow_status_of#{operator_name}#{trainline}#{page}'
             }
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅️ 前',
-            'description': 'Return to previous page',
+            'label': '⬅️ 前のページ',
+            'description': '前のページへ帰る',
             'metadata': f'return_to#follow_delay#show_all_trainline_in#{operator_name}#{page-1}'
         }
         # add continue button
         continue_option = {
-            'label': '➡️ 次',
-            'description': 'Next trainlines',
+            'label': '➡️ 次のページ',
+            'description': '次のページへ来る',
             'metadata': f'continue#follow_delay#show_all_trainline_in#{operator_name}#{page+1}'
         }
         quickrep_options.extend([return_option, continue_option])
@@ -303,14 +303,14 @@ class QuickrepOptionManager:
         
             quickrep_option = {
                 'label': quickrep_label,
-                'description': f'Click to follow the delay status of {trainline} trainline',
+                'description': f'運行情報をフォローする。',
                 'metadata': f'follow_delay#follow_status_of#{operator_name}#{trainline}#{page}'
             }
             quickrep_options.append(quickrep_option)
         # add return button
         return_option = {
-            'label': '⬅️ 前',
-            'description': 'Return to previous page',
+            'label': '⬅️ 前のページ',
+            'description': '前のページへ帰る',
             'metadata': f'return_to#follow_delay#show_all_trainline_in#{operator_name}#{page-1}'
         }
         quickrep_options.extend([return_option])
@@ -355,7 +355,7 @@ class QuickrepOptionManager:
             trainline = data[1]
             quickrep_option = {
             'label': f"❌ {number}. {trainline} ({operator})",
-            'description': f'Click to unfollow the trainline',
+            'description': f'路線をフォロー解除する。',
             'metadata': f'unfollow_delay#unfollow_specific_trainline#{operator}#{trainline}#page#0'
             }
             # the page in above metadata show the page of this option if the number of option too large, need to split to multiple page
@@ -374,15 +374,15 @@ class QuickrepOptionManager:
             trainline = data[1]
             quickrep_option = {
             'label': f"❌ {number}. {trainline} ({operator})",
-            'description': f'Click to unfollow the trainline',
+            'description': f'路線をフォロー解除する。',
             'metadata': f'unfollow_delay#unfollow_specific_trainline#{operator}#{trainline}#page#0'
             }
             # the page in above metadata show the page of this option if the number of option too large, need to split to multiple page
             quickrep_options.append(quickrep_option)
 
         continue_option = {
-            'label': '➡️ 次',
-            'description': 'Next trainlines',
+            'label': '➡️ 次のページ',
+            'description': '次のページへ来る',
             'metadata': f'continue#unfollow_delay#show_all_following_trainlines#page#1'
         }   
         quickrep_options.append(continue_option)
@@ -399,20 +399,20 @@ class QuickrepOptionManager:
             trainline = data[1]
             quickrep_option = {
             'label': f"❌ {number}. {trainline} ({operator})",
-            'description': f'Click to unfollow the trainline',
+            'description': f'路線をフォロー解除する。',
             'metadata': f'unfollow_delay#unfollow_specific_trainline#{operator}#{trainline}#page#{page}'
             }
             # the page in above metadata show the page of this option if the number of option too large, need to split to multiple page
             quickrep_options.append(quickrep_option)
 
         continue_option = {
-            'label': '➡️ 次',
-            'description': 'Next trainlines',
+            'label': '➡️ 次のページ',
+            'description': '次のページへ来る',
             'metadata': f'continue#unfollow_delay#show_all_following_trainlines#page#{page+1}'
         }   
         return_option = {
-            'label': '⬅️ 前',
-            'description': 'Return to previous page',
+            'label': '⬅️ 前のページ',
+            'description': '前のページへ帰る',
             'metadata': f'return_to#unfollow_delay#show_all_following_trainline#page#{page-1}'
         }
         quickrep_options.extend([continue_option, return_option])
@@ -429,15 +429,15 @@ class QuickrepOptionManager:
             trainline = data[1]
             quickrep_option = {
             'label': f"❌ {number}. {trainline} ({operator})",
-            'description': f'Click to unfollow the trainline',
+            'description': f'路線をフォロー解除する。',
             'metadata': f'unfollow_delay#unfollow_specific_trainline#{operator}#{trainline}#page#{page}'
             }
             # the page in above metadata show the page of this option if the number of option too large, need to split to multiple page
             quickrep_options.append(quickrep_option)
   
         return_option = {
-            'label': '⬅️ 前',
-            'description': 'Return to previous page',
+            'label': '⬅️ 前のページ',
+            'description': '前のページへ帰る',
             'metadata': f'return_to#unfollow_delay#show_all_following_trainline#page#{page-1}'
         }
         quickrep_options.extend([return_option])
@@ -451,23 +451,23 @@ class QuickrepOptionManager:
     def home_options(self):
         quickrep_options = [
             {
-                'label': '🌐 Webサイトに来てね。',
-                'description': 'Visit train delay website for more details...',
+                'label': '🌐 Webサイトに来る',
+                'description': 'もっと情報、ニュース...',
                 'metadata': 'visit_website'
             },
             {
-                'label': '🔎 Check train delay status',
-                'description': 'Get current delay info of 86 train lines in Tokyo',
+                'label': '🔎 路線の運行情報を見る',
+                'description': '東京で現在の86路線の運行情報',
                 'metadata': 'check_delay_info'
             },
             {
-                'label': '🔔 Follow train line status',
-                'description': 'Get notified when delay in a train line occur',
+                'label': '🔔 路線の運行情報をフォローする',
+                'description': 'フォローされた路線の遅延の時、DMを受信する',
                 'metadata': f'follow_delay#show_all_operator'
             },
             {
-                'label': '❌ Unfollow trainline',
-                'description': 'Unfollow to stop receiving DM when delay occur',
+                'label': '❌ 路線の運行情報をフォロー解除する',
+                'description': '路線の遅延通知の受信を停止する',
                 'metadata': 'unfollow_delay#show_all_following_trainline'
             }
         ]

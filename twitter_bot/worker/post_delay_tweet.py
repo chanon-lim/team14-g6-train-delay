@@ -85,7 +85,7 @@ def delay_notify_worker():
                 delay_info_split = delay_info.split("。")
                 delay_info = delay_info_split[0]
             tweet_content += '[{0}]\n'.format(update_time)
-            tweet_content += '{0} : {1}\n～～～\n他の機能ために、メセンジー送ってください。'.format(train_line_name, delay_info)
+            tweet_content += '{0} : {1}\n～～～\n他の機能を使うには、DMを送ってください💬'.format(train_line_name, delay_info)
             post_tweet(tweet_content)   
 
     print("delay_notify_worker ends")
