@@ -79,7 +79,6 @@
                         <td><img src="{% static 'img/logo/'|add:information.operator_en|add:' '|add:information.railway_en|add:'.png' %}"
                                 alt="{{ information.railway_en }}" class="railway-icon"></td>
                         <td class="header-text">
-                            {% get_current_language as LANGUAGE_CODE %}
                             {% if LANGUAGE_CODE == 'ja' %}
                             <span>{{ information.railway_ja }}</span><br>
                             <span class="mb-2 text-muted">{{ information.operator_ja }}</span>
