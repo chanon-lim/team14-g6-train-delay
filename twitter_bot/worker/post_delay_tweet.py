@@ -17,9 +17,9 @@ bot_reply_manager = BotReplyManager()
 # ugly, need refactor 
 def delay_notify_worker():
     """Fetch the data from database server, check for delay, if there is delay -> post tweet + send DM to registered users"""
-    print("==================")
-    print(datetime.datetime.now())
-    print("Start delay notify worker!")
+    # print("==================")
+    # print(datetime.datetime.now())
+    # print("Start delay notify worker!")
     database_updated_sucessfully = update_database()
     updated_time = datetime.datetime.now()
     train_info = TrainInfo.objects.all()
@@ -69,7 +69,7 @@ def delay_notify_worker():
             update_all_train_line_current_state_when_database_update_fail(train_info, updated_time)
         
     # now post tweet and notify users through DM
-    print(notify_info_to_tweet)
+    # print(notify_info_to_tweet)
     if len(notify_info_to_tweet) != 0:
         # send DM
         send_delay_data_and_dm_users_from(bot_reply_manager, delay_data=notify_info_to_tweet)
@@ -85,7 +85,7 @@ def delay_notify_worker():
                 delay_info_split = delay_info.split("。")
                 delay_info = delay_info_split[0]
             tweet_content += '[{0}]\n'.format(update_time)
-            tweet_content += '{0} : {1}\n～～～\n他の機能を使うには、DMを送ってください💬'.format(train_line_name, delay_info)
+            tweet_content += '{0} : {1}\n～～～\nBotの機能をしようするために、DMを送ってください。💬'.format(train_line_name, delay_info)
             post_tweet(tweet_content)   
 
     print("delay_notify_worker ends")
