@@ -111,8 +111,8 @@ class BotReplyManager:
 
     def FOLLOW_DELAY_show_trainline_follow_status(self, recipient_id, operator_name, trainline_name, page):
         """If the user already follow a trainline -> send already followed, if not, notify follow successfully"""
-        print(f"FOLLOW_DELAY_show_trainline_follow_status run!!")
-        print(f"\nFollowed trainline: {self.train_follower_manager.get_all_trainline_follow_of_user(recipient_id)}")
+        # print(f"FOLLOW_DELAY_show_trainline_follow_status run!!")
+        # print(f"\nFollowed trainline: {self.train_follower_manager.get_all_trainline_follow_of_user(recipient_id)}")
         already_followed = self.train_follower_manager.get_follow_status_of(recipient_id, operator_name, trainline_name) == 'already'
 
         if already_followed:
@@ -155,7 +155,7 @@ class BotReplyManager:
             if len(followers) != 0:
                 followers_id_list = [follower.user_twitter_id for follower in followers]
                 for id in followers_id_list:
-                    print(f"\n\n!!! sent DM to user \n\n")
+                    # print(f"\n\n!!! sent DM to user \n\n")
                     response = f"📢 {trainline_name}: {delay_info}\n"
                     quickrep_options = self.quickreply_manager.home_options()
                     self.api_manager.send_direct_message(recipient_id=id, text=response, quick_reply_options=quickrep_options)

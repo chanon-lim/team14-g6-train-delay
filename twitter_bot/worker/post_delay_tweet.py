@@ -88,7 +88,7 @@ def delay_notify_worker():
             tweet_content += '{0} : {1}\n～～～\nBotの機能をしようするために、DMを送ってください。💬'.format(train_line_name, delay_info)
             post_tweet(tweet_content)   
 
-    print("delay_notify_worker ends")
+    # print("delay_notify_worker ends")
 
 def DEV_delay_notify_worker():
     """Fetch the data from database server, check for delay, if there is delay -> post tweet + send DM to registered users"""
@@ -171,16 +171,16 @@ def send_delay_data_and_dm_users_from(bot_reply_manager: BotReplyManager, delay_
 
 def update_database():
     """Update the database and return True if successful, False otherwise. Will try 3 times. Success is when the train num is 86"""
-    print("Start update database")
+    # print("Start update database")
     database_update_try = 0
     while database_update_try < 3:
         check_last_update()
         train_info = TrainInfo.objects.all()
         if len(train_info) == NUMBER_OF_TRAINLINE:
-            print("Finish update database")
+            # print("Finish update database")
             return True
         database_update_try += 1
-    print("Finish update database")
+    # print("Finish update database")
     return False
 
 def current_operation_state(train_line_information):
@@ -240,7 +240,7 @@ def generate_all_train_line_current_state():
     train_info = TrainInfo.objects.all()
     train_line_status = dict()
     for train in train_info:
-        print(train.operator_ja)
+        # print(train.operator_ja)
         current_train_operation_state = current_operation_state(train.information_ja)
         if train.operator_ja not in train_line_status:
             train_line_status[train.operator_ja] = {}
@@ -269,7 +269,7 @@ def post_tweet(tweet_content):
 
     try:
         api.verify_credentials()
-        print("Authentication OK")
+        # print("Authentication OK")
     except:
         print("Error")
 

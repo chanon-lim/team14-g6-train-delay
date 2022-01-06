@@ -44,14 +44,14 @@ class EventManager:
             self.bot_reply_manager.home(recipient_id)
         if quickrep_metadata[0] == "check_delay":
             if "get_status" in quickrep_metadata:
-                print(f"get_status quickrep run!") #worked!
+                # print(f"get_status quickrep run!") #worked!
                 operator_name = quickrep_metadata[2]
                 trainline_name = quickrep_metadata[3]
                 page = int(quickrep_metadata[4])
                 self.bot_reply_manager.CHECK_DELAY_show_trainline_delay_status(recipient_id, operator_name, trainline_name, page)
             if len(quickrep_metadata) == 2: # return list of trainline in operator
                 operator_name = quickrep_metadata[1]
-                print("operator_name:", operator_name)
+                # print("operator_name:", operator_name)
                 self.bot_reply_manager.CHECK_DELAY_show_all_trainline_of_specific_operator(recipient_id, operator_name, 0)
         if quickrep_metadata[0] == "continue":
             if quickrep_metadata[1] == "check_delay":
