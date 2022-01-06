@@ -1,5 +1,4 @@
 from django.db import models
-from .util import name_extractor
 from .translator import translate
 # Create your models here.
 

@@ -35,6 +35,7 @@ def refresh_database():
             target_train = TrainInfo.objects.get(operator_ja=operator["odpt:operatorTitle"]["ja"], railway_ja=railway_ja)
             if data["odpt:trainInformationText"]["ja"] != target_train.information_ja:
                 target_train.update_train(data, side_data)
+            
         except:
             print("database mismatch")
 
