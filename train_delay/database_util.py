@@ -1,13 +1,14 @@
 from .models import TrainInfo, LocalStorage
-from datetime import timedelta, datetime
+from datetime import timedelta
 from .util import *
 
-patch_data = {"Seibu":"西武鉄道各線", "Keisei":"京成線", "Keikyu":"京急線", "Keio":"京王線"}
+patch_data = {"Seibu": "西武鉄道各線", "Keisei": "京成線", "Keikyu": "京急線", "Keio": "京王線"}
+
 
 def refresh_database():
-    operator_data = read_data('Operator')
-    railway_data = read_data('Railway')
-    train_info_data = read_data('TrainInformation')
+    operator_data = read_data("Operator")
+    railway_data = read_data("Railway")
+    train_info_data = read_data("TrainInformation")
 
     checkpoint = LocalStorage()
     checkpoint.last_update = timezone.now()
@@ -15,11 +16,15 @@ def refresh_database():
 
     for data in train_info_data:
         operator_tag = data["odpt:operator"]
-        operator = retreive_exact(operator_data, lambda x: x["owl:sameAs"] == operator_tag)
+        operator = retreive_exact(
+            operator_data, lambda x: x["owl:sameAs"] == operator_tag
+        )
         railway_ja, railway_en = "", ""
         try:
             railway_tag = data["odpt:railway"]
-            railway = retreive_exact(railway_data, lambda x: x["owl:sameAs"] == railway_tag)
+            railway = retreive_exact(
+                railway_data, lambda x: x["owl:sameAs"] == railway_tag
+            )
             railway_ja = railway["odpt:railwayTitle"]["ja"]
             railway_en = railway["odpt:railwayTitle"]["en"]
         except:
@@ -32,12 +37,15 @@ def refresh_database():
             "railway_ja": railway_ja,
         }
         try:
-            target_train = TrainInfo.objects.get(operator_ja=operator["odpt:operatorTitle"]["ja"], railway_ja=railway_ja)
+            target_train = TrainInfo.objects.get(
+                operator_ja=operator["odpt:operatorTitle"]["ja"], railway_ja=railway_ja
+            )
             if data["odpt:trainInformationText"]["ja"] != target_train.information_ja:
                 target_train.update_train(data, side_data)
-            
+
         except:
             print("database mismatch")
+
 
 def check_last_update():
     checkpoint = (LocalStorage.objects.all())[0]
@@ -47,7 +55,6 @@ def check_last_update():
     if current_datetime - checkpoint.last_update > timedelta(minutes=3):
         refresh_database()
         return True
-    
+
     else:
         return False
-
