@@ -31,8 +31,11 @@ def refresh_database():
             "railway_en": railway_en,
             "railway_ja": railway_ja,
         }
-        target_train = TrainInfo.objects.get(train_id=data["@id"])
-        target_train.update_train(data, side_data)
+        try:
+            target_train = TrainInfo.objects.get(operator_ja=operator["odpt:operatorTitle"]["ja"], railway_ja=railway_ja)
+            target_train.update_train(data, side_data)
+        except:
+            print("database mismatch")
 
 def check_last_update():
     checkpoint = (LocalStorage.objects.all())[0]
