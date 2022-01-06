@@ -1,0 +1,242 @@
+body {
+    font-family: sans-serif;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+a {
+    color: #000;
+    text-decoration-line: none!important;
+}
+
+a:hover, a:focus {
+    color: #000;
+}
+
+.container-fluid {
+    padding: 0 100px 0 350px;
+    margin: 10px auto;
+}
+
+/* ---------------- */
+/* Leftside section */
+/* ---------------- */
+
+/* <div class="collapse show" id="collapseOperator">
+    <ul>
+        {% for operator in operator_list %}
+        <li><a href="#{{operator}}" class="operator-nav">{{ operator }}</a></li>
+        {% endfor %}
+    </ul>
+</div>  */
+
+.section-nav {
+    position: fixed;
+    top: 0;
+    bottom: 0; 
+    left: 0;
+    width: 250px; /*Width of frame div*/
+    padding: 20px 0 0 30px;
+    height: 100%;
+    overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
+}
+
+.accordion-item {
+    border: 0;
+}
+
+.accordion-button {
+    color: #666 !important;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.accordion-button:focus, 
+.accordion-button:hover {
+    color: #333 !important;
+    box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #fff;
+    box-shadow: none;
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23333'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+.accordion-body {
+    padding: 0 0 0 0.6rem;
+}
+
+.section-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.section-nav li {
+    margin-left: 1rem;
+}
+
+.section-nav li.active > .operator-nav {
+    color: #333;
+    border-left: 1px solid #333;
+    font-weight: 500;
+}
+
+.section-nav .operator-nav {
+    color: #ccc;
+    display: block;
+    padding: .125rem 0 0 5px;
+    transition: all 50ms ease-in-out;
+}
+
+.section-nav li a:hover,
+.section-nav li a:focus {
+    color: #666;
+}
+
+/* ------------ */
+/* Main section */
+/* ------------ */
+
+.operator {
+    margin-top: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.train-info {
+    height: fit-content;
+    margin: 5px 5px;
+    transition: all ease-out 0.1s;
+}
+
+.train-info:hover,
+.train-info:focus {
+    background-color: #F7F7F7;
+}
+
+.train-info a:hover,
+.train-info a:focus {
+    color: #000;
+}
+
+.train-info.delay {
+    border-left: 5px solid #C70039;
+}
+
+/* .card.normal {
+    border-left: 5px solid #2f9d8a;
+} */
+
+.train-info .header {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+}
+
+.train-info .card-text {
+    padding-top: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    /* Multiple line ellipsis */
+    /* display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;   */
+}
+
+.train-info .railway-icon {
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin-top: 5px;
+    margin-right:5px;
+}
+
+/* -------------- */
+/* Detail webpage */
+/* -------------- */
+
+.detail {
+    text-align: center;
+}
+
+#detail-header .railway-icon {
+    width: 32px;
+    height: 32px;
+}
+
+#detail-header {
+    width: 100%;
+    display: flex; 
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#detail-header img {
+    margin-right: 10px;
+}
+
+#detail-header .header-text #railway-name {
+    font-size: 1.25rem;
+}
+
+#detail-header .header-text .mb-2.text-muted {
+    font-size: 0.9rem;
+}
+
+.detail .delay-icon {
+    margin: 1.5rem 0 0.5rem;
+    width: 100px;
+    height: 100px;
+}
+
+.detail .train-status {
+    font-weight: 600;
+}
+
+.news {
+    text-align: left;
+}
+
+.news .card-body .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.news .card-body .card-subtitle {
+    font-size: 0.8rem;
+}
+
+.news .card-body .card-text {
+    font-size: 0.9rem;
+}
+
+
+/* ---------- */
+/* Responsive */
+/* ---------- */
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .container-fluid {
+        padding: 10px;
+        width: 100%;
+    }
+
+    .section-nav {
+        display: none;
+    }
+
+    .card {
+        height: fit-content;
+    }
+}

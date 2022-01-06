@@ -13,10 +13,7 @@ def refresh_database():
     checkpoint.last_update = timezone.now()
     checkpoint.save()
 
-    TrainInfo.objects.all().delete()
-
     for data in train_info_data:
-        train_info = TrainInfo()
         operator_tag = data["odpt:operator"]
         operator = retreive_exact(operator_data, lambda x: x["owl:sameAs"] == operator_tag)
         railway_ja, railway_en = "", ""
@@ -34,7 +31,12 @@ def refresh_database():
             "railway_en": railway_en,
             "railway_ja": railway_ja,
         }
-        train_info.update_train(data, side_data)
+        try:
+            target_train = TrainInfo.objects.get(operator_ja=operator["odpt:operatorTitle"]["ja"], railway_ja=railway_ja)
+            if data["odpt:trainInformationText"]["ja"] != target_train.information_ja:
+                target_train.update_train(data, side_data)
+        except:
+            print("database mismatch")
 
 def check_last_update():
     checkpoint = (LocalStorage.objects.all())[0]

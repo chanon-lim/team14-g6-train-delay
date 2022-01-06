@@ -4,14 +4,93 @@ from train_delay.models import TrainInfo
 import tweepy
 import datetime
 import json
+from twitter_bot.dm_manager import bot_reply_manager
 from twitter_bot.worker import NUMBER_OF_TRAINLINE
 import pytz
+from twitter_bot.dm_manager.bot_reply_manager import BotReplyManager
 
 PREVIOUS_TRAIN_OPERATION_STATUS_FILE_PATH = 'twitter_bot/worker/all_train_line_status.json'
 TRAIN_OPERATION_STATUS_PROTOTYPE_FILE_PATH = "twitter_bot/worker/all_train_line_status_prototype.json"
 
+bot_reply_manager = BotReplyManager()
+
 # ugly, need refactor 
 def delay_notify_worker():
+    """Fetch the data from database server, check for delay, if there is delay -> post tweet + send DM to registered users"""
+    # print("==================")
+    # print(datetime.datetime.now())
+    # print("Start delay notify worker!")
+    database_updated_sucessfully = update_database()
+    updated_time = datetime.datetime.now()
+    train_info = TrainInfo.objects.all()
+    notify_info_to_tweet = [] # what will be posted in tweet, list of tuple [(railway_ja, information_ja, operator_ja)]
+    normal_info_DEV = [] # same with notify_info but reverse
+    with open(PREVIOUS_TRAIN_OPERATION_STATUS_FILE_PATH, 'r', encoding="utf-8") as fin:
+        previous_train_operation_status_json = fin.read()
+        previous_all_train_operation_status_data = json.loads(previous_train_operation_status_json)
+        last_updated_time = previous_all_train_operation_status_data["updated_time"]
+        last_updated_time = datetime.datetime.strptime(last_updated_time, '%Y-%m-%d %H:%M')
+    if database_updated_sucessfully:
+        # if last update is longer than 6 min -> cannot use old delay data to compare
+        if (updated_time - last_updated_time) > datetime.timedelta(minutes=6):
+            for trainline in train_info:
+                current_operation_status = current_operation_state(trainline.information_ja)
+                if current_operation_status == 'delay':
+                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+                if current_operation_status == 'normal':
+                    normal_info_DEV.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+            update_all_train_line_current_state(train_info, updated_time)
+        else:
+            for trainline in train_info:
+                current_operation_status = current_operation_state(trainline.information_ja)
+                previous_status = previous_all_train_operation_status_data["status"][trainline.operator_ja][trainline.railway_ja]
+                if current_operation_status == "delay" and previous_status != "delay":
+                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+                if current_operation_status == 'normal':
+                    normal_info_DEV.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+            update_all_train_line_current_state(train_info, updated_time)
+    else: # if not update successfully
+        if (updated_time - last_updated_time) > datetime.timedelta(minutes=6):
+            for trainline in train_info:
+                current_operation_status = current_operation_state(trainline.information_ja)
+                if current_operation_status == 'delay':
+                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+                if current_operation_status == 'normal':
+                    normal_info_DEV.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+            update_all_train_line_current_state_when_database_update_fail(train_info, updated_time)
+        else:
+            for trainline in train_info:
+                current_operation_status = current_operation_state(trainline.information_ja)
+                previous_status = previous_all_train_operation_status_data["status"][trainline.operator_ja][trainline.railway_ja]
+                if current_operation_status == "delay" and previous_status != "delay":
+                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+                if current_operation_status == 'normal':
+                    normal_info_DEV.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+            update_all_train_line_current_state_when_database_update_fail(train_info, updated_time)
+        
+    # now post tweet and notify users through DM
+    # print(notify_info_to_tweet)
+    if len(notify_info_to_tweet) != 0:
+        # send DM
+        send_delay_data_and_dm_users_from(bot_reply_manager, delay_data=notify_info_to_tweet)
+        
+        # tweet
+        for delay_train in notify_info_to_tweet:
+            tweet_content = ''
+            update_time = datetime.datetime.now(tz=pytz.timezone("Asia/Tokyo")).strftime("%H:%M")
+            train_line_name = delay_train[0]
+            delay_info = delay_train[1]
+            # max number of character for tweet in Japanese
+            if len(delay_info) >= 95:
+                delay_info_split = delay_info.split("。")
+                delay_info = delay_info_split[0]
+            tweet_content += '[{0}]\n'.format(update_time)
+            tweet_content += '{0} : {1}\n～～～\nBotの機能を使用するために、DMを送ってください。💬'.format(train_line_name, delay_info)
+            post_tweet(tweet_content)   
+
+    # print("delay_notify_worker ends")
+
+def DEV_delay_notify_worker():
     """Fetch the data from database server, check for delay, if there is delay -> post tweet + send DM to registered users"""
     print("==================")
     print(datetime.datetime.now())
@@ -19,44 +98,62 @@ def delay_notify_worker():
     database_updated_sucessfully = update_database()
     updated_time = datetime.datetime.now()
     train_info = TrainInfo.objects.all()
-    notify_info_to_tweet = [] # what will be posted in tweet
+    notify_info_to_tweet = [] # what will be posted in tweet, list of tuple [(railway_ja, information_ja, operator_ja)]
+    normal_info_DEV = [] # same with notify_info but reverse
     with open(PREVIOUS_TRAIN_OPERATION_STATUS_FILE_PATH, 'r', encoding="utf-8") as fin:
         previous_train_operation_status_json = fin.read()
         previous_all_train_operation_status_data = json.loads(previous_train_operation_status_json)
         last_updated_time = previous_all_train_operation_status_data["updated_time"]
         last_updated_time = datetime.datetime.strptime(last_updated_time, '%Y-%m-%d %H:%M')
     if database_updated_sucessfully:
+        # if last update is longer than 6 min -> cannot use old delay data to compare
         if (updated_time - last_updated_time) > datetime.timedelta(minutes=6):
             for trainline in train_info:
                 current_operation_status = current_operation_state(trainline.information_ja)
                 if current_operation_status == 'delay':
-                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja))
+                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+                if current_operation_status == 'normal':
+                    normal_info_DEV.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
             update_all_train_line_current_state(train_info, updated_time)
         else:
             for trainline in train_info:
                 current_operation_status = current_operation_state(trainline.information_ja)
                 previous_status = previous_all_train_operation_status_data["status"][trainline.operator_ja][trainline.railway_ja]
                 if current_operation_status == "delay" and previous_status != "delay":
-                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja))
+                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+                if current_operation_status == 'normal':
+                    normal_info_DEV.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
             update_all_train_line_current_state(train_info, updated_time)
     else: # if not update successfully
         if (updated_time - last_updated_time) > datetime.timedelta(minutes=6):
             for trainline in train_info:
                 current_operation_status = current_operation_state(trainline.information_ja)
                 if current_operation_status == 'delay':
-                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja))
+                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+                if current_operation_status == 'normal':
+                    normal_info_DEV.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
             update_all_train_line_current_state_when_database_update_fail(train_info, updated_time)
         else:
             for trainline in train_info:
                 current_operation_status = current_operation_state(trainline.information_ja)
                 previous_status = previous_all_train_operation_status_data["status"][trainline.operator_ja][trainline.railway_ja]
                 if current_operation_status == "delay" and previous_status != "delay":
-                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja))
+                    notify_info_to_tweet.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
+                if current_operation_status == 'normal':
+                    normal_info_DEV.append((trainline.railway_ja, trainline.information_ja, trainline.operator_ja))
             update_all_train_line_current_state_when_database_update_fail(train_info, updated_time)
         
-    # now post tweet
+    # now post tweet and notify users through DM
     print(notify_info_to_tweet)
+    print(f"Normal operation info: {normal_info_DEV}")
+    if len(normal_info_DEV) != 0:
+        DEV_send_normal_data_and_dm_users_from(bot_reply_manager, normal_data=normal_info_DEV)
+
     if len(notify_info_to_tweet) != 0:
+        # send DM
+        # send_delay_data_and_dm_users_from(bot_reply_manager, delay_data=notify_info_to_tweet)
+        
+        # tweet
         for delay_train in notify_info_to_tweet:
             tweet_content = ''
             update_time = datetime.datetime.now(tz=pytz.timezone("Asia/Tokyo")).strftime("%H:%M")
@@ -66,40 +163,24 @@ def delay_notify_worker():
 
     print("delay_notify_worker ends")
 
-def delay_notify_worker2():
-    print("delay_notify_worker starts!")
-    check_last_update()
-    train_info = TrainInfo.objects.all()
-    notify_info = [] # what will be posted in tweet
-    with open(PREVIOUS_TRAIN_OPERATION_STATUS_FILE_PATH, 'r') as fin:
-        previous_train_operation_status_json = fin.read()
-        previous_all_train_operation_status_data = json.loads(previous_train_operation_status_json)
-    for trainline in train_info:
-        current_operation_status = current_operation_state(trainline.information_ja)
-        if current_operation_status == 'delay':
-            previous_status = previous_all_train_operation_status_data[trainline.operator_ja][trainline.railway_ja]
-            if previous_status != 'delay':
-                notify_info.append((trainline.railway_ja, trainline.information_ja))
-    if len(notify_info) != 0:
-        for delay_train in notify_info:
-            tweet_content = ''
-            update_time = datetime.datetime.now().strftime("%H:%M")
-            tweet_content += '[{0}]\n'.format(update_time)
-            tweet_content += '{0} : {1}\n'.format(delay_train[0], delay_train[1])
-            post_tweet(tweet_content)
-    print("notify_info", notify_info)
-    update_all_train_line_current_state(train_info)
-    print("delay_notify_worker finishes!")
+def DEV_send_normal_data_and_dm_users_from(bot_reply_manager: BotReplyManager, normal_data):
+    bot_reply_manager.DEV_NOTIFY_NORMAL_notify_trainline_normal_to_follower(normal_data)
+
+def send_delay_data_and_dm_users_from(bot_reply_manager: BotReplyManager, delay_data):
+    bot_reply_manager.NOTIFY_DELAY_notify_trainline_delay_to_follower(delay_data)
 
 def update_database():
     """Update the database and return True if successful, False otherwise. Will try 3 times. Success is when the train num is 86"""
+    # print("Start update database")
     database_update_try = 0
     while database_update_try < 3:
         check_last_update()
         train_info = TrainInfo.objects.all()
         if len(train_info) == NUMBER_OF_TRAINLINE:
+            # print("Finish update database")
             return True
         database_update_try += 1
+    # print("Finish update database")
     return False
 
 def current_operation_state(train_line_information):
@@ -153,15 +234,13 @@ def update_all_train_line_current_state_when_database_update_fail(train_info, up
     with open("twitter_bot/worker/all_train_line_status.json", "wb") as fout:
         fout.write(train_line_status_json)
 
-    
-
 def generate_all_train_line_current_state():
     """Create JSON file state 'delay' or 'normal' of all train line"""
     check_last_update()
     train_info = TrainInfo.objects.all()
     train_line_status = dict()
     for train in train_info:
-        print(train.operator_ja)
+        # print(train.operator_ja)
         current_train_operation_state = current_operation_state(train.information_ja)
         if train.operator_ja not in train_line_status:
             train_line_status[train.operator_ja] = {}
@@ -190,11 +269,11 @@ def post_tweet(tweet_content):
 
     try:
         api.verify_credentials()
-        print("Authentication OK")
+        # print("Authentication OK")
     except:
         print("Error")
 
-    api.update_status(tweet_content)
+    api.update_status(tweet_content, attachment_url="https://twitter.com/messages/compose?recipient_id=1465916201155317760")
 
 
 def set_interval(func, sec):
@@ -213,4 +292,6 @@ def print_test():
 
 def start_worker():
     """Worker will check train info every 5 min"""
+    initial_db_update_thread = threading.Thread(target=update_database, daemon=True)
+    initial_db_update_thread.start()
     set_interval(delay_notify_worker, 60*5)

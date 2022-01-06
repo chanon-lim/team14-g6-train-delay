@@ -16,10 +16,9 @@ def index(request):
         context['operator_list'] = sorted(list(set([info.operator_ja for info in train_info])))
     elif request.LANGUAGE_CODE == 'en':
         context['operator_list'] = sorted(list(set([info.operator_en for info in train_info])))
-    
+
     return render(request, 'train_delay/index.html', context)
-
-
+    
 def detail(request, operator_en, railway_en):
     this_railway = TrainInfo.objects.get(operator_en=operator_en, railway_en=railway_en)
     search_keyword = this_railway.railway_ja

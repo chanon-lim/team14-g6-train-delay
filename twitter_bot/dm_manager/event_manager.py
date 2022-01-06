@@ -4,54 +4,9 @@ from twitter_bot.dm_manager.twitter_api_manager import APIManager
 from twitter_bot.dm_manager import TWITTER_BOT_ID
 from twitter_bot.dm_manager.twitter_event import TwitterEvent, DMEvent
 from twitter_bot.worker import ALL_TRAIN_OPERATORS, ALL_TRAIN_LINES
-from .quick_reply_manager import QuickrepOptionManager
+from .bot_reply_manager import BotReplyManager
 from train_delay.models import TrainInfo
 from twitter_bot.worker.post_delay_tweet import current_operation_state
-
-class BotReplyManager:
-    api_manager = APIManager() 
-    quickreply_manager = QuickrepOptionManager()
-    def __init__(self):
-        pass
-
-    def visit_website(self, recipient_id):
-        """Send message and link to Mike's website"""
-        quickrep_options = self.quickreply_manager.home_options()
-        response = "Please visit website at: https://train-delay-chien.herokuapp.com/"
-        self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
-
-    def CHECK_DELAY_show_all_operators_list(self, recipient_id):
-        """Show list of all operators to CHECK delay"""
-        quickrep_options = self.quickreply_manager.CHECK_DELAY_all_operator_options()
-        response = "Please choose 1 operator to see all trainlines belong to"
-        self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
-
-    def CHECK_DELAY_show_all_trainline_of_specific_operator(self, recipient_id, operator_name, page=0):
-        """Show list of all trainline in a specific operator name, eg all trainline of JREast"""
-        quickrep_options = self.quickreply_manager.CHECK_DELAY_all_trainline_of_specific_operator_options(operator_name, page)
-        response = "Choose a trainline to check its delay status"
-        self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
-
-    def home(self, recipient_id):
-        quickrep_options = self.quickreply_manager.home_options()
-        response = "Welcome back..."
-        self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
-
-    def user_cmd_apologize(self, recipient_id):
-        """Sorry user for not supporting user cmd yet"""
-        quickrep_options = self.quickreply_manager.home_options()
-        response = "Sorry, we currently do not support user command yet. Please use quick reply instead 🙇‍♂️"
-        self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
-
-    def CHECK_DELAY_show_trainline_delay_status(self, recipient_id, operator_name, trainline_name, page):
-        quickrep_options = self.quickreply_manager.CHECK_DELAY_show_trainline_delay_status_options(operator_name, trainline_name, page)
-        trainline_status_object = TrainInfo.objects.filter(operator_ja=operator_name).filter(railway_ja=trainline_name)[0]
-        trainline_status = current_operation_state(trainline_status_object.information_ja)
-        if trainline_status == "normal":
-            response = f"🟢 {trainline_status_object.railway_ja}: {trainline_status_object.information_ja}"
-        else:
-            response = f"🟠 {trainline_status_object.railway_ja}: {trainline_status_object.information_ja}"
-        self.api_manager.send_direct_message(recipient_id, response, quick_reply_options=quickrep_options)
 
 class EventManager:
     bot_reply_manager = BotReplyManager()
@@ -89,27 +44,67 @@ class EventManager:
             self.bot_reply_manager.home(recipient_id)
         if quickrep_metadata[0] == "check_delay":
             if "get_status" in quickrep_metadata:
-                print(f"get_status quickrep run!") #worked!
+                # print(f"get_status quickrep run!") #worked!
                 operator_name = quickrep_metadata[2]
                 trainline_name = quickrep_metadata[3]
                 page = int(quickrep_metadata[4])
                 self.bot_reply_manager.CHECK_DELAY_show_trainline_delay_status(recipient_id, operator_name, trainline_name, page)
             if len(quickrep_metadata) == 2: # return list of trainline in operator
                 operator_name = quickrep_metadata[1]
-                print("operator_name:", operator_name)
+                # print("operator_name:", operator_name)
                 self.bot_reply_manager.CHECK_DELAY_show_all_trainline_of_specific_operator(recipient_id, operator_name, 0)
-        if quickrep_metadata[0] == "continue" and quickrep_metadata[1] == "check_delay":
-            option_page = int(quickrep_metadata[3])
-            operator_name = quickrep_metadata[2]
-            self.bot_reply_manager.CHECK_DELAY_show_all_trainline_of_specific_operator(recipient_id, operator_name, option_page)
-        if quickrep_metadata[0] == "return_to":
-            if quickrep_metadata[1] == "check_delay_info":
-                self.bot_reply_manager.CHECK_DELAY_show_all_operators_list(recipient_id)
-            else:
-                operator_name = quickrep_metadata[2]
+        if quickrep_metadata[0] == "continue":
+            if quickrep_metadata[1] == "check_delay":
                 option_page = int(quickrep_metadata[3])
+                operator_name = quickrep_metadata[2]
                 self.bot_reply_manager.CHECK_DELAY_show_all_trainline_of_specific_operator(recipient_id, operator_name, option_page)
-
+            if quickrep_metadata[1] == "follow_delay":
+                option_page = int(quickrep_metadata[4])
+                operator_name = quickrep_metadata[3]
+                self.bot_reply_manager.FOLLOW_DELAY_show_all_trainline_of_specific_operator(recipient_id, operator_name, option_page)
+            if quickrep_metadata[1] == "unfollow_delay":
+                page = int(quickrep_metadata[4])
+                self.bot_reply_manager.UNFOLLOW_DELAY_display_all_following_trainline(recipient_id, page)
+        if quickrep_metadata[0] == "return_to":
+            # there are 2 cases when hit 'BACK' button: return to all operator when only 1 page of trainline OR return to previous page of trainline
+            if quickrep_metadata[1] == "unfollow_delay":
+                page = int(quickrep_metadata[4])
+                self.bot_reply_manager.UNFOLLOW_DELAY_display_all_following_trainline(recipient_id, page)
+            elif quickrep_metadata[1] == "follow_delay":
+                if "show_all_operator" in quickrep_metadata:
+                    self.bot_reply_manager.FOLLOW_DELAY_show_all_operators_list(recipient_id)
+                if "show_all_trainline_in" in quickrep_metadata:
+                    operator_name = quickrep_metadata[3]
+                    option_page = int(quickrep_metadata[4])
+                    self.bot_reply_manager.FOLLOW_DELAY_show_all_trainline_of_specific_operator(recipient_id, operator_name, option_page)
+            # ugly, need to refactor and change the name of button for consistency
+            else:
+                if quickrep_metadata[1] == "check_delay_info":
+                    self.bot_reply_manager.CHECK_DELAY_show_all_operators_list(recipient_id)
+                else:
+                    operator_name = quickrep_metadata[2]
+                    option_page = int(quickrep_metadata[3])
+                    self.bot_reply_manager.CHECK_DELAY_show_all_trainline_of_specific_operator(recipient_id, operator_name, option_page)
+        if quickrep_metadata[0] == "follow_delay":
+            if "show_all_operator" in quickrep_metadata:
+                self.bot_reply_manager.FOLLOW_DELAY_show_all_operators_list(recipient_id)
+            if "show_all_trainline_in" in quickrep_metadata:
+                operator_name = quickrep_metadata[2]
+                self.bot_reply_manager.FOLLOW_DELAY_show_all_trainline_of_specific_operator(recipient_id, operator_name)
+            if "follow_status_of" in quickrep_metadata:
+                operator_name = quickrep_metadata[2]
+                trainline_name = quickrep_metadata[3]
+                page = int(quickrep_metadata[4])
+                self.bot_reply_manager.FOLLOW_DELAY_show_trainline_follow_status(recipient_id, operator_name, trainline_name, page)
+        if quickrep_metadata[0] == "unfollow_delay":
+            if "unfollow_specific_trainline" in quickrep_metadata:
+                operator_name = quickrep_metadata[2]
+                trainline_name = quickrep_metadata[3]
+                page = int(quickrep_metadata[5])
+                self.bot_reply_manager.UNFOLLOW_DELAY_unfollow_specific_trainline(recipient_id, operator_name, trainline_name, page)
+            if "show_all_following_trainline" in quickrep_metadata:
+                self.bot_reply_manager.UNFOLLOW_DELAY_display_all_following_trainline(recipient_id, 0)
+    
     # now when user send smt -> return to top menu, for testing only
     def handle_dm_user_cmd_event(self, dm_event: DMEvent):
         recipient_id = dm_event.get_recipient_id()

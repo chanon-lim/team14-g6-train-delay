@@ -9,9 +9,32 @@ from twitter_bot.dm_manager import CONSUMER_SECRET
 from twitter_bot.dm_manager.twitter_event import TwitterEvent
 
 # Create your views here.
+# Test to use worker internal
 def index(request):
     """Homepage of the chatbot"""
     print("The index method is called")
+    import tweepy
+    from datetime import datetime
+
+    CONSUMER_KEY = "Nw0ZC1zhdYQhPvWNP5QpZ2lo6"
+    CONSUMER_SECRET = "nuzgy6dN1SfLoO9czlsGxv5HcpNIxTfRss8eiRS8vS1KOAszBs"
+    ACCESS_TOKEN = "1465916201155317760-6uKnzE1jguNUurjMYD9atglCO5ejLq"
+    ACCESS_TOKEN_SECRET = "8NvIuMxRU6WD8U1ZwDpFPT9nmoHSyPFBgMdTSwmvtfEvK"
+
+    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+
+    api = tweepy.API(auth)
+
+    try:
+        api.verify_credentials()
+        print("Authentication OK")
+    except:
+        print("Error")
+    now = datetime.now()
+    now_str = str(now)
+    send_message = api.send_direct_message(1465928035333713926, f"{now_str}\nThis is message sent from internal worker")
+
     return HttpResponse("This is the home page of Twitter chat bot. You can learn more about our app at our website.")
 
 def test_get_request(request):
