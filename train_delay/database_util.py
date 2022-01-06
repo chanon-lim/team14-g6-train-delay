@@ -43,8 +43,8 @@ def check_last_update():
     checkpoint = (LocalStorage.objects.all())[0]
     current_datetime = timezone.now()
 
-    # The interval is 2 minutes
-    if current_datetime - checkpoint.last_update > timedelta(minutes=2):
+    # The interval is 3 minutes
+    if current_datetime - checkpoint.last_update > timedelta(minutes=3):
         refresh_database()
         return True
     
