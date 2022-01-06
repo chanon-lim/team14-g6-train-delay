@@ -81,7 +81,7 @@ def delay_notify_worker():
             train_line_name = delay_train[0]
             delay_info = delay_train[1]
             # max number of character for tweet in Japanese
-            if len(delay_info) >= 110:
+            if len(delay_info) >= 95:
                 delay_info_split = delay_info.split("。")
                 delay_info = delay_info_split[0]
             tweet_content += '[{0}]\n'.format(update_time)
