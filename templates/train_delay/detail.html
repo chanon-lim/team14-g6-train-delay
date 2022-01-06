@@ -1,4 +1,7 @@
 {% load static %}
+{% load i18n %}
+<!-- i18n_url is a custom template tags for change language, directory is inside train_delay app -->
+{% load i18n_urls %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,19 +25,44 @@
             <div class="accordion" id="accordionPanelsStayOpenExample">
                 <div class="accordion-item">
                     <div class="accordion-header" id="panelsStayOpen">
-                        <a class="accordion-button" data-bs-toggle="collapse"
-                            href="#collapseOperator" aria-expanded="true"
-                            aria-controls="collapseOperator">
-                            運行情報
+                        <a class="accordion-button" data-bs-toggle="collapse" href="#collapseOperator"
+                            aria-expanded="true" aria-controls="collapseOperator">
+                            {% translate 'Train Status' %}
                         </a>
                     </div>
-                    <div id="collapseOperator" class="accordion-collapse collapse show" 
+                    <div id="collapseOperator" class="accordion-collapse collapse show"
                         aria-labelledby="panelsStayOpen">
                         <div class="accordion-body">
                             <ul>
                                 {% for operator in operator_list %}
                                 <li><a href="{% url 'train_delay:index' %}" class="operator-nav">{{ operator }}</a></li>
                                 {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <a class="accordion-button collapsed" data-bs-toggle="collapse"
+                            href="#collapseLanguages" aria-expanded="true"
+                            aria-controls="collapseLanguages">
+                            {% translate 'Languages' %}
+                        </a>
+                    </div>
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    <div id="collapseLanguages" class="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen">
+                        <div class="accordion-body">
+                            <ul>
+                            {% for lang in languages %}
+                                <li>
+                                    <a class="operator-nav" href="{% change_lang ''|add:lang.code %}">
+                                        {{ lang.name_local }}
+                                    </a>
+                                </li>
+                            {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -47,25 +75,41 @@
                 <table class="card-header" id="detail-header">
                     <tr>
                         <td><img src="{% static 'img/logo/'|add:information.operator_en|add:' '|add:information.railway_en|add:'.png' %}"
-                            alt="{{ information.railway_en }}" class="railway-icon"></td>
+                                alt="{{ information.railway_en }}" class="railway-icon"></td>
                         <td class="header-text">
-                            <span id="railway-name">{{ information.railway_ja }}</span><br>
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% if LANGUAGE_CODE == 'ja' %}
+                            <span>{{ information.railway_ja }}</span><br>
                             <span class="mb-2 text-muted">{{ information.operator_ja }}</span>
+                            {% elif LANGUAGE_CODE == 'en' %}
+                            <span>{{ information.railway_en }}</span><br>
+                            <span class="mb-2 text-muted">{{ information.operator_en }}</span>
+                            {% endif %}
                         </td>
                     </tr>
                 </table>
                 <div class="card-body">
                     {% if information.information_ja == "平常運転" %}
                     <p><img src="{% static 'img/circle.png' %}" alt="normal" class="delay-icon"></p>
-                    <h3 class="card-text train-status">{{ information.information_ja}}</h3>
+                    <h3 class="card-text train-status">{% translate 'Service on Schedule' %}</h3>
                     {% else %}
                     <p><img src="{% static 'img/exclamation.png' %}" alt="delay" class="delay-icon"></p>
-                    <h3 class="card-title train-status">遅延</h3>
-                    <p class="card-text">{{ information.information_ja}}</p>
+                    <h3 class="card-title train-status">{% translate 'Delay' %}</h3>
+                    {% if LANGUAGE_CODE == 'ja' %}
+                    <p class="card-text train-status-info">{{ information.information_ja }}</p>
+                    {% elif LANGUAGE_CODE == 'en' %}
+                    <p class="card-text train-status-info">{{ information.information_en }}</p>
                     {% endif %}
-                    
+                    {% endif %}
+
                     <div class="news">
-                        <h4>最新ニュース</h4><hr>
+                        <h4>
+                            {% translate 'Latest News' %}
+                            {% if LANGUAGE_CODE == 'en' %}
+                            <span> (in Japanese)</span>
+                            {% elif LANGUAGE_CODE == 'ja' %}{% endif %}
+                        </h4>
+                        <hr>
                         {% for new in news_list%}
                         <a href="{{new.link}}">
                             <div class="card">
