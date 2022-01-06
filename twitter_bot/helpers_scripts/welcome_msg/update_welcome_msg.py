@@ -15,7 +15,7 @@ params = {
 
 updated_data = {
     "message_data": {
-            "text": "こんにちは！東京電車遅延情報のTwitterBotです。🚊🤖\nBotの機能を使用するために、QuickReplyオプションを使用してください。👇👇",
+            "text": "こんにちは！東京電車遅延情報のTwitterBotです。🚊🤖\nBotの機能を使用するために、4つ素早い返信(QuickReply)オプションを使用してください。👇👇",
             "quick_reply": {
                 "type": "options",
                 "options": [
