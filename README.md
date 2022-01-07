@@ -17,7 +17,7 @@ pip install -r requirements.txt
 # Change this in settings.py in the django server you use to host the bots
 
 ```
-MONGODB_URI = "mongodb+srv://p:p@cluster0.hgt7v.mongodb.net/g6t14traindelay?retryWrites=true&w=majority"
+MONGODB_URI = "mongodb+srv://p:p@cluster0.ldjyq.mongodb.net/t6g14traindelay?retryWrites=true&w=majority"
 
 DATABASES = {
     "default": {
