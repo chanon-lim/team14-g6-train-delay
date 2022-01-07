@@ -2,6 +2,12 @@
 
 Team 14 (Group 6) team exercise for making train delay web applciation.
 
+- Web App: https://train-delay-chien.herokuapp.com/
+- Twitter Bot: https://twitter.com/g6_bot
+- LINE Bot 
+
+![LINEQR](https://user-images.githubusercontent.com/85671768/148489924-081a7f8a-f8f1-404d-8670-4106b0693459.png)
+
 # Requirements
 
 ```
