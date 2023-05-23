@@ -8,6 +8,10 @@ Team 14 (Group 6) team exercise for making train delay web applciation.
 
 ![LINEQR](https://user-images.githubusercontent.com/85671768/148489924-081a7f8a-f8f1-404d-8670-4106b0693459.png)
 
+# Images
+![homepage](https://github.com/chanon-lim/team14-g6-train-delay/assets/85671768/8fa8c5fe-c967-4a0b-b2f8-17bd3ae2adca)
+![delay_info](https://github.com/chanon-lim/team14-g6-train-delay/assets/85671768/659c5fe2-7207-47fd-888e-cf9824b640e0)
+
 # Requirements
 
 ```
